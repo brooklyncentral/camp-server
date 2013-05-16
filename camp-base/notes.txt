@@ -76,3 +76,92 @@ a "camp component wrapper" would be good - e.g. Entity asEntity(CampComponent)
 
 END
 
+
+
+
+======
+
+
+REST
+
+camp-api
+    *
+
+camp-base
+    api/
+        CampPlatform
+        ComponentTemplate
+        ...
+    util/
+        collection/
+            CollectionLookupProvider
+                .get(id)
+                .iterator()
+        dto/
+            ToDto
+            DtoFactory
+    BasicCampPlatform
+        register templates and instances (and engines)
+        get(type, id)
+    impl/
+        BasicResource
+            toDto
+        BasicComponentTemplate
+        BasicAssemblyTemplate
+        BasicPlatformComponentTemplate
+        …
+    dto/
+        *Dto
+    server/
+        endpoints/*Endpoint - returns the DTO's
+
+sample/camp-samp-le-server
+        
+
+camp-ops
+    
+brooklyn-camp
+    registers entities with CampPlatform    
+
+
+
+
+
+
+CAMP
+*   platform offers PlatformComponentTemplates (e.g. elasttic AppServer cluster) which a user can
+    stitch together in an AssemblyTemplate to create an Assembly which is their application;
+    user can also supply ApplicationComponentTemplate and ApplicationComponent instances
+    (e.g. WAR files) for use in assemblies;
+    and Requirements and Capabilities can be defined to e.g. indicate that a 3-tier app
+    Template requires a WAR file and a schema (from the user) and PlatformComponents
+    where these will run (from the platform) which get resolved at real-time 
+    with as little or as much guidance from the user as desired;
+    relies on conventions on types and tags (ie not specified in spec, yet) to facilitate re-use;
+*   defines REST API for interacting with these, and uploading assemblies and app components
+    (not platform components)
+*   example
+
+TOSCA
+    ServiceTemplate is the basic idea
+    Types
+        NodeType
+        RelationshipType
+    TopologyTemplate
+        NodeTemplate
+        RelationshipTemplate
+        GroupTemplate
+    internal elements
+        Artifacts:
+            "deployment artifacts" for creating nodes, 
+            "implementation artifacts" for operations)
+        Container capabilities / requirements
+        Properties, operations, scripts, constraints
+        Policies
+    Plans
+        Plan
+
+
+REST API survey
+
+END

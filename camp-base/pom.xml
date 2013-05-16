@@ -22,6 +22,11 @@
             <artifactId>brooklyn-utils-common</artifactId>
             <version>${brooklyn.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
         
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -33,7 +38,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
-            <scope>test</scope>
         </dependency>
         
     </dependencies>

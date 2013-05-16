@@ -16,11 +16,58 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <properties>
+        <jersey.version>1.12</jersey.version>
+        <jersey.json.version>1.12</jersey.json.version>
+        <jersey.multipart.version>1.12</jersey.multipart.version>
+        <jetty.version>8.1.4.v20120524</jetty.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.brooklyn.camp</groupId>
             <artifactId>camp-base</artifactId>
             <version>${camp-impl.version}</version>
+        </dependency>
+        
+          <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-servlet</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>${jersey.json.version}</version>
+              <exclusions>
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-impl</artifactId>
+                </exclusion>
+            </exclusions>               
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-multipart</artifactId>
+            <version>${jersey.multipart.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty.version}</version>
         </dependency>
     </dependencies>
 

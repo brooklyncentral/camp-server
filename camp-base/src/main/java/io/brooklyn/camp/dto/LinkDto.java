@@ -1,40 +1,35 @@
 package io.brooklyn.camp.dto;
 
-import io.brooklyn.camp.util.TemporaryUtils;
-
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.base.Preconditions;
 
-public class LinkDto {
+public class LinkDto extends DtoCustomAttributes {
 
-    public final String href;
-    public final String targetName;
-    
-//    @JsonSerialize(include=Inclusion.NON_NULL)
-    @JsonUnwrapped
-//    @JsonInclude(Include.NON_EMPTY)
-    public final Map<String,? extends Object> customAttributes;
-    
+    private final String href;
+    private final String targetName;
+
     @JsonCreator
     public LinkDto(
             @JsonProperty("href") String href, 
-            @JsonProperty("targetName") String targetName, 
-            @JsonProperty("customAttributes") Map<String, ? extends Object> customAttributes) {
+            @JsonProperty("targetName") String targetName,
+            @JsonProperty("_") Map<String, ? extends Object> customAttributes) {
+        super(customAttributes);
+        
         Preconditions.checkNotNull(href, "href");
         Preconditions.checkNotNull(targetName, "targetName");
         this.href = href;
         this.targetName = targetName;
-        this.customAttributes = TemporaryUtils.immutable(customAttributes);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        // FIXME
-//        return HashCodeBuilder.XXX();
-        return ((LinkDto)obj).href.equals(href);
+    public String getHref() {
+        return href;
     }
+    
+    public String getTargetName() {
+        return targetName;
+    }
+
 }

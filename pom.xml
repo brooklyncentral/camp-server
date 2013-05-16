@@ -73,6 +73,7 @@
 
         <brooklyn.version>0.6.0-SNAPSHOT</brooklyn.version>  <!-- BROOKLYN_VERSION -->
         <jackson.version>2.2.0</jackson.version>
+        <commons-lang3.version>3.1</commons-lang3.version>
 
         <!-- not sure if these are needed here, or inherited fine from brooklyn -->
         <surefire.version>2.13</surefire.version>
