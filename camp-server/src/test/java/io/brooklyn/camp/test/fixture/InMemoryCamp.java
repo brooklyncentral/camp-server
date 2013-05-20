@@ -1,7 +1,8 @@
 package io.brooklyn.camp.test.fixture;
 
-import io.brooklyn.camp.CampPlatform;
+import io.brooklyn.camp.BasicCampPlatform;
 import io.brooklyn.camp.CampServer;
+import io.brooklyn.camp.test.mock.web.MockWebPlatform;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,11 @@ public class InMemoryCamp {
             // getComponentTemplate() -> operations, links, etc
         
             // platformView.getComponent(id) -> returns instance of domain-specific component type
-        CampPlatform p = new MockCampPlatform1();
+        BasicCampPlatform p = new BasicCampPlatform();
+        MockWebPlatform.populate(p);
         
         // new server
-        CampServer s = new CampServer(p).start();
+        CampServer s = new CampServer(p, "").start();
         
         // requests against server
         

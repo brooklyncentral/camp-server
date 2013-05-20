@@ -1,4 +1,4 @@
-package io.brooklyn.camp.util;
+package io.brooklyn.util.dups;
 
 import java.io.IOException;
 import java.net.DatagramSocket;

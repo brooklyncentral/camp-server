@@ -29,8 +29,34 @@
             <artifactId>camp-base</artifactId>
             <version>${camp-impl.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.brooklyn.camp</groupId>
+            <artifactId>camp-base</artifactId>
+            <version>${camp-impl.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
         
-          <dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
             <version>${jersey.version}</version>

@@ -1,11 +1,13 @@
-package io.brooklyn.camp.rest.resource;
+package io.brooklyn.camp;
 
+import io.brooklyn.camp.rest.resource.AbstractCampRestResource;
+import io.brooklyn.camp.rest.resource.PlatformComponentTemplateRestResource;
+import io.brooklyn.camp.rest.resource.PlatformRestResource;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.google.common.collect.Iterables;
 
 public class CampRestResources {

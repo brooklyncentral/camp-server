@@ -1,15 +1,18 @@
 package io.brooklyn.camp;
 
 import io.brooklyn.camp.impl.PlatformComponentTemplate;
-import io.brooklyn.camp.impl.PlatformRootResource;
-import io.brooklyn.camp.util.collection.ResourceListProvider;
+import io.brooklyn.camp.impl.PlatformRootSummary;
+import io.brooklyn.camp.util.collection.AbstractResourceListProvider;
 
 public abstract class CampPlatform {
 
-    public abstract ResourceListProvider<PlatformComponentTemplate> platformComponentTemplates();
+    public abstract AbstractResourceListProvider<PlatformComponentTemplate> platformComponentTemplates();
 
-    public PlatformRootResource root() {
-        return new PlatformRootResource(null);
+    public PlatformRootSummary root() {
+        return PlatformRootSummary.builder().
+                // TODO
+                name("CAMP Platform").
+                build();
     }
     
 }

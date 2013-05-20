@@ -8,14 +8,16 @@ import javax.ws.rs.Produces;
 
 //import io.brooklyn.camp.rest.apidoc.Apidoc;
 
-@Path("/camp/v11")
+@Path(PlatformRestResource.CAMP_URI_PATH)
 //@Apidoc("Application entities")
 @Produces("application/json")
 public class PlatformRestResource extends AbstractCampRestResource {
 
+    public static final String CAMP_URI_PATH = "/camp/v11";
+    
     @GET
     public PlatformDto get() {
-        return camp().root().dto();
+        return dto().adapt(camp().root());
     }
     
 }

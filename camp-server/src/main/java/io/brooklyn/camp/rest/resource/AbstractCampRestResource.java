@@ -1,8 +1,8 @@
 package io.brooklyn.camp.rest.resource;
 
 import io.brooklyn.camp.CampPlatform;
-import io.brooklyn.camp.CampServer;
 import io.brooklyn.camp.rest.util.CampRestUtils;
+import io.brooklyn.camp.rest.util.DtoFactory;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
@@ -15,21 +15,16 @@ public abstract class AbstractCampRestResource {
     // so we have set up a NullServletContextProvider in our tests) 
     @Context ServletContext servletContext;
     
-    private CampPlatform platform;
     private CampRestUtils util;
     
-    public synchronized CampPlatform camp() {
-        if (platform!=null) return platform;
-        platform = (CampPlatform) servletContext.getAttribute(CampServer.CAMP_PLATFORM_ATTRIBUTE);
-        return platform;
-    }
-
     public synchronized CampRestUtils util() {
         if (util!=null) return util;
-        util = new CampRestUtils(camp());
+        util = new CampRestUtils(servletContext);
         return util;
     }
     
+    public CampPlatform camp() { return util().camp(); }
+    public DtoFactory dto() { return util().dto(); }
 
 //    private ManagementContext managementContext;
 //    private BrooklynRestResourceUtils brooklynRestResourceUtils;

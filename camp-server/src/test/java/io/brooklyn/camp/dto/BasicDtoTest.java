@@ -8,11 +8,12 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import brooklyn.util.collections.MutableMap;
+import brooklyn.util.exceptions.Exceptions;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/** Tests identity methods and custom attributes for DTO, including Jackson JSON serialization */
 @Test
 public class BasicDtoTest {
 
@@ -57,12 +58,16 @@ public class BasicDtoTest {
         Assert.assertNotEquals(l1.hashCode(), l2.hashCode());
     }
     
-    public static JsonNode tree(Object l) throws JsonProcessingException, IOException {
-        ObjectMapper m = new ObjectMapper();
-        String s = m.writeValueAsString(l);
-        log.debug(l.toString()+" -> "+s);
-        JsonNode t = m.readTree(s);
-        return t;
+    public static JsonNode tree(Object l) {
+        try {
+            ObjectMapper m = new ObjectMapper();
+            String s = m.writeValueAsString(l);
+            log.debug(l.toString()+" -> "+s);
+            JsonNode t = m.readTree(s);
+            return t;
+        } catch (Exception e) {
+            throw Exceptions.propagate(e);
+        }
     }
 
 }

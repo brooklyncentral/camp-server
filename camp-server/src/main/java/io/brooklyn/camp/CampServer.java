@@ -1,8 +1,10 @@
 package io.brooklyn.camp;
 
-import io.brooklyn.camp.rest.resource.CampRestResources;
-import io.brooklyn.camp.util.NetworkUtils;
+import io.brooklyn.camp.rest.util.DtoFactory;
+import io.brooklyn.util.dups.NetworkUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
@@ -17,6 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import brooklyn.util.exceptions.Exceptions;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import com.sun.jersey.api.core.DefaultResourceConfig;
 import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
@@ -25,30 +29,76 @@ public class CampServer {
 
     private static final Logger log = LoggerFactory.getLogger(CampServer.class);
 
-    public static final String CAMP_PLATFORM_ATTRIBUTE = "io.brooklyn.camp.CampPlatform";
+    public static final String CAMP_PLATFORM_ATTRIBUTE = CampPlatform.class.getCanonicalName();
+    public static final String DTO_FACTORY = DtoFactory.class.getCanonicalName();
     
-    final CampPlatform platform;
-    WebAppContext webAppConcontext;
+    private final CampPlatform platform;
+    private final String uriBase;
+    private DtoFactory dtoFactory;
     
-    public CampServer(CampPlatform platform) {
+    WebAppContext webAppContext;
+    Server server;
+    
+    public CampServer(CampPlatform platform, String uriBase) {
         this.platform = platform;
+        this.uriBase = uriBase;
     }
 
     public CampPlatform getPlatform() {
         return platform;
     }
+
+    public String getUriBase() {
+        return uriBase;
+    }
+    
+    public WebAppContext getWebAppContext() {
+        return webAppContext;
+    }
+    
+    public synchronized DtoFactory getDtoFactory() {
+        if (dtoFactory!=null) return dtoFactory;
+        dtoFactory = createDtoFactory();
+        return dtoFactory;
+    }
+    
+    protected DtoFactory createDtoFactory() {
+        return new DtoFactory(getPlatform(), getUriBase());
+    }
     
     public synchronized CampServer start() {
-        if (webAppConcontext!=null)
+        if (webAppContext!=null)
             throw new IllegalStateException("Already started");
         
-        webAppConcontext = new WebAppContext();
-        webAppConcontext.setAttribute(CAMP_PLATFORM_ATTRIBUTE, getPlatform());
-        webAppConcontext.setContextPath("/");
-        //      webAppConcontext.setWar(findJsguiWebapp()!=null ? findJsguiWebapp() : createTempWebDirWithIndexHtml("Brooklyn REST API <p> (gui not available)"));
-        CampServerUtils.installAsServletFilter(webAppConcontext);
+        webAppContext = new WebAppContext();
+        webAppContext.setContextPath("/");
+        webAppContext.setAttribute(CAMP_PLATFORM_ATTRIBUTE, getPlatform());
+        webAppContext.setAttribute(DTO_FACTORY, getDtoFactory());
+        webAppContext.setWar(
+                // TODO if there is a GUI or other war...
+                //findJsguiWebapp()!=null ? findJsguiWebapp() : 
+                CampServerUtils.createTempWebDirWithIndexHtml("CAMP REST API <p> (gui not available)"));
+        CampServerUtils.installAsServletFilter(webAppContext);
+        
+        server = CampServerUtils.startServer(webAppContext, "CAMP server");
         
         return this;
+    }
+
+    public synchronized void stop() {
+        try {
+            server.stop();
+            server = null;
+            webAppContext.stop();
+            webAppContext = null;
+        } catch (Exception e) {
+            throw Exceptions.propagate(e);
+        }
+    }
+    
+    public Integer getPort() {
+        if (server==null) return null;
+        return server.getConnectors()[0].getLocalPort();
     }
 
     public static class CampServerUtils {
@@ -89,6 +139,19 @@ public class CampServer {
 
             return server;
         }
+        
+        /** create a directory with a simple index.html so we have some content being served up */
+        public static String createTempWebDirWithIndexHtml(String indexHtmlContent) {
+            File dir = Files.createTempDir();
+            dir.deleteOnExit();
+            try {
+                Files.write(indexHtmlContent, new File(dir, "index.html"), Charsets.UTF_8);
+            } catch (IOException e) {
+                Exceptions.propagate(e);
+            }
+            return dir.getAbsolutePath();
+        }
+
     }
 
 }

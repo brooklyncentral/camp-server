@@ -17,7 +17,7 @@ public class LinkDtoTest {
     
     @Test
     public void testSimple() throws IOException {
-        LinkDto l = new LinkDto("http://foo", "Foo", null);
+        LinkDto l = LinkDto.newInstance("http://foo", "Foo");
         
         JsonNode t = BasicDtoTest.tree(l);
         Assert.assertEquals(t.size(), 2);
@@ -30,7 +30,7 @@ public class LinkDtoTest {
 
     @Test
     public void testCustomAttrs() throws IOException {
-        LinkDto l = new LinkDto("http://foo", "Foo", MutableMap.of("bar", "bee"));
+        LinkDto l = LinkDto.newInstance("http://foo", "Foo", MutableMap.of("bar", "bee"));
         
         JsonNode t = BasicDtoTest.tree(l);
         Assert.assertEquals(t.size(), 3);
