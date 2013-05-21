@@ -12,7 +12,6 @@ import io.brooklyn.camp.rest.resource.AbstractCampRestResource;
 import io.brooklyn.camp.rest.resource.ApplicationComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformRestResource;
-import io.brooklyn.util.temp.Strings2;
 
 import java.util.Map;
 
@@ -20,6 +19,7 @@ import javax.ws.rs.Path;
 
 import brooklyn.util.collections.MutableMap;
 import brooklyn.util.net.Urls;
+import brooklyn.util.text.Strings;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
@@ -108,20 +108,20 @@ public class DtoFactory {
         
         public String uri(Class<? extends BasicResource> targetType, String id) {
             return Preconditions.checkNotNull(registryId.get(targetType), 
-                    Strings2.format("No REST ID converter registered for %s (id %s)", targetType, id))
+                    Strings.format("No REST ID converter registered for %s (id %s)", targetType, id))
                     .apply(id);
         }
 
         public String uri(BasicResource x) {
             return Preconditions.checkNotNull(registryResource.get(x.getClass()), 
-                    Strings2.format("No REST converter registered for %s (%s)", x.getClass(), x))
+                    Strings.format("No REST converter registered for %s (%s)", x.getClass(), x))
                     .apply(x);
         }
         
         public String uriOfRestResource(Class<?> restResourceClass) {
             return Urls.mergePaths(uriBase, 
                     Preconditions.checkNotNull(restResourceClass.getAnnotation(Path.class),
-                            Strings2.format("No @Path on type %s", restResourceClass))
+                            Strings.format("No @Path on type %s", restResourceClass))
                     .value());
         }
             

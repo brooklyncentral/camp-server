@@ -1,13 +1,13 @@
 package io.brooklyn.camp.impl;
 
 import io.brooklyn.camp.commontypes.RepresentationSkew;
-import io.brooklyn.util.temp.Time2;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import brooklyn.util.text.Identifiers;
+import brooklyn.util.time.Time;
 
 import com.google.common.collect.ImmutableList;
 
@@ -29,7 +29,7 @@ public class BasicResource {
     private String name;
     private String type;
     private String description;
-    private Date created = Time2.dropMilliseconds(new Date());
+    private Date created = Time.dropMilliseconds(new Date());
     private List<String> tags = Collections.emptyList();
     private RepresentationSkew representationSkew;
     
@@ -73,7 +73,7 @@ public class BasicResource {
     }
     private void setCreated(Date created) {
         // precision beyond seconds breaks equals check
-        this.created = Time2.dropMilliseconds(created);
+        this.created = Time.dropMilliseconds(created);
     }
     private void setTags(List<String> tags) {
         this.tags = ImmutableList.copyOf(tags);

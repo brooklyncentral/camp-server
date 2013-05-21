@@ -3,16 +3,17 @@ package io.brooklyn.camp.dto;
 import io.brooklyn.camp.commontypes.RepresentationSkew;
 import io.brooklyn.camp.impl.BasicResource;
 import io.brooklyn.camp.rest.util.DtoFactory;
-import io.brooklyn.util.temp.Time2;
 
 import java.util.Date;
 import java.util.List;
 
+import brooklyn.util.time.Time;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.util.ISO8601Utils;
 
 public class ResourceDto extends DtoCustomAttributes {
@@ -46,7 +47,7 @@ public class ResourceDto extends DtoCustomAttributes {
     
     @JsonSetter
     private void setCreated(Date created) {
-        this.created = Time2.dropMilliseconds(created);
+        this.created = Time.dropMilliseconds(created);
     }
 
     @JsonIgnore
