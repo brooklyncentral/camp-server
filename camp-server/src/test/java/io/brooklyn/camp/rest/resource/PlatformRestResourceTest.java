@@ -17,6 +17,7 @@ public class PlatformRestResourceTest extends AbstractRestResourceTest {
     public void testPlatformIncludesList() {
         PlatformDto p = load(PlatformRestResource.CAMP_URI_PATH, PlatformDto.class);
         PlatformComponentTemplateDto pct = load(p.getPlatformComponentTemplates().get(0).getHref(), PlatformComponentTemplateDto.class);
+        log.debug("Loaded PCT via REST: "+pct);
         Assert.assertNotNull(pct.getName());
     }
         

@@ -7,12 +7,22 @@ import io.brooklyn.camp.util.collection.AbstractResourceListProvider;
 public abstract class CampPlatform {
 
     public abstract AbstractResourceListProvider<PlatformComponentTemplate> platformComponentTemplates();
+    
+    private PlatformRootSummary root;
 
-    public PlatformRootSummary root() {
+    public CampPlatform() {
+        root = initializeRoot();
+    }
+    
+    /** default root creation; intended to be overridden */
+    protected PlatformRootSummary initializeRoot() {
         return PlatformRootSummary.builder().
-                // TODO
                 name("CAMP Platform").
                 build();
     }
     
+    public PlatformRootSummary root() {
+        return root;
+    }
+
 }
