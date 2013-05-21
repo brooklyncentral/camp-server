@@ -1,14 +1,18 @@
 package io.brooklyn.camp.rest.util;
 
 import io.brooklyn.camp.CampPlatform;
+import io.brooklyn.camp.dto.ApplicationComponentTemplateDto;
 import io.brooklyn.camp.dto.PlatformComponentTemplateDto;
 import io.brooklyn.camp.dto.PlatformDto;
+import io.brooklyn.camp.impl.ApplicationComponentTemplate;
 import io.brooklyn.camp.impl.BasicResource;
 import io.brooklyn.camp.impl.PlatformComponentTemplate;
 import io.brooklyn.camp.impl.PlatformRootSummary;
 import io.brooklyn.camp.rest.resource.AbstractCampRestResource;
+import io.brooklyn.camp.rest.resource.ApplicationComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformRestResource;
+import io.brooklyn.util.temp.Strings2;
 
 import java.util.Map;
 
@@ -18,6 +22,7 @@ import brooklyn.util.collections.MutableMap;
 import brooklyn.util.net.Urls;
 
 import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
 
 public class DtoFactory {
 
@@ -33,6 +38,7 @@ public class DtoFactory {
         uriFactory = new UriFactory();
         uriFactory.registerIdentifiableRestResource(PlatformRootSummary.class, PlatformRestResource.class);
         uriFactory.registerIdentifiableRestResource(PlatformComponentTemplate.class, PlatformComponentTemplateRestResource.class);
+        uriFactory.registerIdentifiableRestResource(ApplicationComponentTemplate.class, ApplicationComponentTemplateRestResource.class);
     }
 
     public CampPlatform getPlatform() {
@@ -53,6 +59,10 @@ public class DtoFactory {
 
     public PlatformComponentTemplateDto adapt(PlatformComponentTemplate platformComponentTemplate) {
         return PlatformComponentTemplateDto.newInstance(this, platformComponentTemplate);
+    }
+
+    public ApplicationComponentTemplateDto adapt(ApplicationComponentTemplate applicationComponentTemplate) {
+        return ApplicationComponentTemplateDto.newInstance(this, applicationComponentTemplate);
     }
 
     public PlatformDto adapt(PlatformRootSummary root) {
@@ -97,11 +107,15 @@ public class DtoFactory {
         }
         
         public String uri(Class<? extends BasicResource> targetType, String id) {
-            return registryId.get(targetType).apply(id);
+            return Preconditions.checkNotNull(registryId.get(targetType), 
+                    Strings2.format("No REST ID converter registered for %s (id %s)", targetType, id))
+                    .apply(id);
         }
 
         public String uri(BasicResource x) {
-            return registryResource.get(x.getClass()).apply(x);
+            return Preconditions.checkNotNull(registryResource.get(x.getClass()), 
+                    Strings2.format("No REST converter registered for %s (%s)", x.getClass(), x))
+                    .apply(x);
         }
     }
 

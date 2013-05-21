@@ -1,132 +1,32 @@
 
+DONE
 
-hi Folks-
-
-Wanted to let everyone know what conclusions we reached in the meeting on IRC yesterday on this topic:
-
-(1) start a separate project "camp-server" in github/brooklyncentral, which will be *independent* of brooklyn-core, and will provide much of what is needed to stand up a CAMP REST server.
-
-(2) then work on a brooklyn-camp in brooklyncentral/brooklyn which stitches the REST API above to Brooklyn entities
-
-At the end of this, everything in Brooklyn will speak CAMP, and there will be a natural way (through Entity) to expose new PaaS through Brooklyn, like what we've done for Cloud Foundry and OpenShift (which could do with some updating).
-
-CAMP is still evolving in places, but it's stable enough that there is something useful to work towards. If you're looking for tasks to help with, give a shout on IRC.
-
-Best
-Alex
-
-PS. We're starting by refactoring brooklyn utils so it can be used in camp-server. This should also help with groovy neutrality.
-
-PPS. Notes from etherpad below.
-
----
-
-github brooklyncentral/camp-server
-
-camp-server
-    io.brooklyn.camp.
-            (could we get "io.camp" or something else ... campserver? ???)
-        api/
-            CampPlatform
-            ComponentTemplate
-            ...
-        util/
-            collection/
-                interface CollectionLookupProvider<T>
-                    T get(id)
-                    Iterator<T> iterator()
-            dto/
-                interface ToDto<X,XDto>
-                    XDto toDto(X)
-                class DtoUtils
-                    // does reflection stuff
-                BasicCampPlatform
-                    register templates and instances (and engines)
-                    get(type, id)
-        impl/
-            BasicResource (implements ToDto<BasicResource,ResourceDto>
-            BasicComponentTemplate
-            BasicComponent newInstance(Map config, List relationships)
-            BasicAssemblyTemplate
-            BasicPlatformComponentTemplate
-            ...
-        dto/
-            *Dto
-        server/
-        endpoints/*Endpoint - returns the DTO's
-
-
-github brooklyncentral/brooklyn-camp
-OR github brooklyncentral/brooklyn/ usage/camp/
-?
-
-brooklyn-camp
-io.brooklyn.camp.brooklyn
-?
-(adapter classes to configure the above)
-
-
-ROADMAP
-
+SOME of these (for PCT's and ACT's)
 * dto classes and endpoints (jersey resources) to have a rest server
 * impl classes (abstract or composable?) which can make dto's
 * connect impl classes to brooklyn
-(then see what's next...)
-a "camp component wrapper" would be good - e.g. Entity asEntity(CampComponent)
 
-END
+TODO
 
-
-
-
-======
-
-
-REST
-
-camp-api
-    *
-
-camp-base
-    api/
-        CampPlatform
-        ComponentTemplate
-        ...
-    util/
-        collection/
-            CollectionLookupProvider
-                .get(id)
-                .iterator()
-        dto/
-            ToDto
-            DtoFactory
-    BasicCampPlatform
-        register templates and instances (and engines)
-        get(type, id)
-    impl/
-        BasicResource
-            toDto
-        BasicComponentTemplate
-        BasicAssemblyTemplate
-        BasicPlatformComponentTemplate
-        …
-    dto/
-        *Dto
-    server/
-        endpoints/*Endpoint - returns the DTO's
-
-sample/camp-samp-le-server
-        
-
-camp-ops
-    
-brooklyn-camp
-    registers entities with CampPlatform    
+* remaining classes
+* PDP formation
 
 
 
 
 
+
+THOUGHTS
+
+* get camp.io
+* project for camp-ops, camp-samp-le-server
+
+
+
+
+
+
+COMPARISON
 
 CAMP
 *   platform offers PlatformComponentTemplates (e.g. elasttic AppServer cluster) which a user can
@@ -160,8 +60,5 @@ TOSCA
         Policies
     Plans
         Plan
-
-
-REST API survey
 
 END

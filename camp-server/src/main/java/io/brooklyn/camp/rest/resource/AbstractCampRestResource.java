@@ -1,8 +1,11 @@
 package io.brooklyn.camp.rest.resource;
 
 import io.brooklyn.camp.CampPlatform;
+import io.brooklyn.camp.impl.BasicResource;
 import io.brooklyn.camp.rest.util.CampRestUtils;
 import io.brooklyn.camp.rest.util.DtoFactory;
+import io.brooklyn.camp.rest.util.WebResourceUtils;
+import io.brooklyn.camp.util.collection.AbstractResourceListProvider;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
@@ -26,29 +29,11 @@ public abstract class AbstractCampRestResource {
     public CampPlatform camp() { return util().camp(); }
     public DtoFactory dto() { return util().dto(); }
 
-//    private ManagementContext managementContext;
-//    private BrooklynRestResourceUtils brooklynRestResourceUtils;
-//
-//    public synchronized ManagementContext mgmt() {
-//        if (managementContext!=null) return managementContext;
-//        managementContext = (ManagementContext) servletContext.getAttribute(BrooklynServiceAttributes.BROOKLYN_MANAGEMENT_CONTEXT);
-//        if (managementContext!=null) return managementContext;
-//        
-//        throw new IllegalStateException("ManagementContext not supplied for Brooklyn Jersey Resource "+this);
-//    }
-//    
-//    public void injectManagementContext(ManagementContext managementContext) {
-//        if (this.managementContext!=null) {
-//            if (this.managementContext.equals(managementContext)) return;
-//            throw new IllegalStateException("ManagementContext cannot be changed: specified twice for Brooklyn Jersey Resource "+this);
-//        }
-//        this.managementContext = managementContext;
-//    }
-//
-//    public synchronized BrooklynRestResourceUtils brooklyn() {
-//        if (brooklynRestResourceUtils!=null) return brooklynRestResourceUtils;
-//        brooklynRestResourceUtils = new BrooklynRestResourceUtils(mgmt());
-//        return brooklynRestResourceUtils;
-//    }
+    public static <T extends BasicResource> T lookup(AbstractResourceListProvider<T> list, String id) {
+        T result = list.get(id);
+        if (result==null)
+            throw WebResourceUtils.notFound("No such element: %s", id);
+        return result;
+    }
     
 }

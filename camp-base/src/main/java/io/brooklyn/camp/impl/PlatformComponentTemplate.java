@@ -9,6 +9,7 @@ package io.brooklyn.camp.impl;
 public class PlatformComponentTemplate extends BasicResource {
 
     public static final String CAMP_TYPE = "PlatformComponentTemplate";
+    static { assert CAMP_TYPE.equals(PlatformComponentTemplate.class.getSimpleName()); }
     
     /** Use {@link #builder()} to create */
     protected PlatformComponentTemplate() {}
