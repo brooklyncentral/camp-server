@@ -5,6 +5,10 @@ import io.brooklyn.camp.rest.util.DtoFactory;
 
 public class PlatformComponentTemplateDto extends ResourceDto {
 
+    // defined as a constant so can be used in Swagger REST API annotations
+    public static final String CLASS_NAME = "io.brooklyn.camp.dto.PlatformComponentTemplateDto";
+    static { assert CLASS_NAME.equals(PlatformComponentTemplateDto.class.getCanonicalName()); }
+    
     // TODO add custom fields
     
     protected PlatformComponentTemplateDto() {}

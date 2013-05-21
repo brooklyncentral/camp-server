@@ -1,11 +1,15 @@
 package io.brooklyn.camp;
 
 import io.brooklyn.camp.rest.resource.AbstractCampRestResource;
+import io.brooklyn.camp.rest.resource.ApidocRestResource;
+import io.brooklyn.camp.rest.resource.ApplicationComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformRestResource;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import brooklyn.rest.apidoc.ApidocHelpMessageBodyWriter;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.google.common.collect.Iterables;
@@ -16,13 +20,14 @@ public class CampRestResources {
         List<AbstractCampRestResource> resources = new ArrayList<AbstractCampRestResource>();
         resources.add(new PlatformRestResource());
         resources.add(new PlatformComponentTemplateRestResource());
+        resources.add(new ApplicationComponentTemplateRestResource());
         return resources;
     }
 
     public static Iterable<Object> getApidocResources() {
         List<Object> resources = new ArrayList<Object>();
-//        resources.add(new ApidocHelpMessageBodyWriter());
-//        resources.add(new ApidocResource());
+        resources.add(new ApidocHelpMessageBodyWriter());
+        resources.add(new ApidocRestResource());
         return resources;
     }
 

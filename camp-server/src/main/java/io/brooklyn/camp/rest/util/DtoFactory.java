@@ -48,7 +48,7 @@ public class DtoFactory {
     public UriFactory getUriFactory() {
         return uriFactory;
     }
-    
+
     public String uri(BasicResource x) {
         return getUriFactory().uri(x);
     }
@@ -102,7 +102,7 @@ public class DtoFactory {
         @SuppressWarnings({ "unchecked", "rawtypes" })
         public synchronized <T extends BasicResource> void registerIdentifiableRestResource(Class<T> type, Class<? extends AbstractCampRestResource> restResource) {
             registerIdentityFunction(type, 
-                    Urls.mergePaths(uriBase, restResource.getAnnotation(Path.class).value()),
+                    uriOfRestResource(restResource),
                     (Function) CampRestGuavas.IDENTITY_OF_REST_RESOURCE);
         }
         
@@ -117,6 +117,15 @@ public class DtoFactory {
                     Strings2.format("No REST converter registered for %s (%s)", x.getClass(), x))
                     .apply(x);
         }
+        
+        public String uriOfRestResource(Class<?> restResourceClass) {
+            return Urls.mergePaths(uriBase, 
+                    Preconditions.checkNotNull(restResourceClass.getAnnotation(Path.class),
+                            Strings2.format("No @Path on type %s", restResourceClass))
+                    .value());
+        }
+            
+
     }
 
 }

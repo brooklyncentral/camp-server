@@ -95,6 +95,13 @@
             <artifactId>jetty-webapp</artifactId>
             <version>${jetty.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>io.brooklyn</groupId>
+            <artifactId>brooklyn-utils-rest-swagger</artifactId>
+            <version>${brooklyn.version}</version>
+        </dependency>
+        
     </dependencies>
 
 </project>

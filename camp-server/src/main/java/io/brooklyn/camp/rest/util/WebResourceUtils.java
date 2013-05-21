@@ -1,13 +1,13 @@
 package io.brooklyn.camp.rest.util;
 
-import io.brooklyn.camp.rest.resource.ApiError;
-
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import brooklyn.rest.domain.ApiError;
 
 public class WebResourceUtils {
 

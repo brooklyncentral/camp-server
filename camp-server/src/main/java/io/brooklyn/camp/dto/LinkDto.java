@@ -8,6 +8,10 @@ import java.util.Map;
 
 public class LinkDto extends DtoCustomAttributes {
 
+    // defined as a constant so can be used in Swagger REST API annotations
+    public static final String CLASS_NAME = "io.brooklyn.camp.dto.LinkDto";
+    static { assert CLASS_NAME.equals(LinkDto.class.getCanonicalName()); }
+
     private String href;
     private String targetName;
 

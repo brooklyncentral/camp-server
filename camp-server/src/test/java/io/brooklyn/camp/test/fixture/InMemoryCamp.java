@@ -26,6 +26,7 @@ public class InMemoryCamp {
         // new server
         CampServer s = new CampServer(p, "").start();
         
+        log.info("Running at: "+s.getUriBase());
         // requests against server
         
     }
