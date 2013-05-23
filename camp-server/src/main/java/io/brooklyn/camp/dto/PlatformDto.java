@@ -16,6 +16,26 @@ public class PlatformDto extends ResourceDto {
     public static final String CLASS_NAME = "io.brooklyn.camp.dto.PlatformDto";
     static { assert CLASS_NAME.equals(PlatformDto.class.getCanonicalName()); }
 
+    protected PlatformDto() {}
+    protected PlatformDto(DtoFactory dtoFactory, PlatformRootSummary x) {
+        super(dtoFactory, x);
+        platformComponentTemplates = new ArrayList<LinkDto>();
+        for (Link<PlatformComponentTemplate> t: dtoFactory.getPlatform().platformComponentTemplates().links()) {
+            platformComponentTemplates.add(LinkDto.newInstance(dtoFactory, PlatformComponentTemplate.class, t));
+        }
+        
+        applicationComponentTemplates = new ArrayList<LinkDto>();
+        for (Link<ApplicationComponentTemplate> t: dtoFactory.getPlatform().applicationComponentTemplates().links()) {
+            applicationComponentTemplates.add(LinkDto.newInstance(dtoFactory, ApplicationComponentTemplate.class, t));
+        }
+        
+        // TODO set custom fields
+
+        apidoc = LinkDto.newInstance(
+                dtoFactory.getUriFactory().uriOfRestResource(ApidocRestResource.class),
+                "API documentation");
+    }
+
     // TODO add custom fields
     private List<LinkDto> platformComponentTemplates;
     private List<LinkDto> applicationComponentTemplates;
@@ -23,8 +43,6 @@ public class PlatformDto extends ResourceDto {
     // non-CAMP, but useful
     private LinkDto apidoc;
     
-    protected PlatformDto() {}
-
     public List<LinkDto> getPlatformComponentTemplates() {
         return platformComponentTemplates;
     }
@@ -40,29 +58,7 @@ public class PlatformDto extends ResourceDto {
     // --- building ---
 
     public static PlatformDto newInstance(DtoFactory dtoFactory, PlatformRootSummary x) {
-        return new PlatformDto().newInstanceInitialization(dtoFactory, x);
-    }
-
-    protected PlatformDto newInstanceInitialization(DtoFactory dtoFactory, PlatformRootSummary x) {
-        super.newInstanceInitialization(dtoFactory, x);
-
-        platformComponentTemplates = new ArrayList<LinkDto>();
-        for (Link<PlatformComponentTemplate> t: dtoFactory.getPlatform().platformComponentTemplates().links()) {
-            platformComponentTemplates.add(LinkDto.newInstance(dtoFactory, PlatformComponentTemplate.class, t));
-        }
-        
-        applicationComponentTemplates = new ArrayList<LinkDto>();
-        for (Link<ApplicationComponentTemplate> t: dtoFactory.getPlatform().applicationComponentTemplates().links()) {
-            applicationComponentTemplates.add(LinkDto.newInstance(dtoFactory, ApplicationComponentTemplate.class, t));
-        }
-        
-        // TODO add custom fields
-
-        apidoc = LinkDto.newInstance(
-                dtoFactory.getUriFactory().uriOfRestResource(ApidocRestResource.class),
-                "API documentation");
-        
-        return this;
+        return new PlatformDto(dtoFactory, x);
     }
 
 }
