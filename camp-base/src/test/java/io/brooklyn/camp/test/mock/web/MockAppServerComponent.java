@@ -1,6 +1,6 @@
 package io.brooklyn.camp.test.mock.web;
 
-import io.brooklyn.camp.impl.PlatformComponentTemplate;
+import io.brooklyn.camp.spi.PlatformComponentTemplate;
 
 
 public class MockAppServerComponent {

@@ -1,8 +1,8 @@
 package io.brooklyn.camp.dto;
 
-import io.brooklyn.camp.impl.BasicResource;
-import io.brooklyn.camp.impl.Link;
 import io.brooklyn.camp.rest.util.DtoFactory;
+import io.brooklyn.camp.spi.AbstractResource;
+import io.brooklyn.camp.spi.Link;
 
 import java.util.Map;
 
@@ -27,11 +27,11 @@ public class LinkDto extends DtoCustomAttributes {
     
     // --- building ---
 
-    public static LinkDto newInstance(DtoFactory dtoFactory, Class<? extends BasicResource> targetType, Link<?> x) {
+    public static LinkDto newInstance(DtoFactory dtoFactory, Class<? extends AbstractResource> targetType, Link<?> x) {
         return new LinkDto().newInstanceInitialization(dtoFactory, targetType, x);
     }
     
-    protected LinkDto newInstanceInitialization(DtoFactory dtoFactory, Class<? extends BasicResource> targetType, Link<?> x) {
+    protected LinkDto newInstanceInitialization(DtoFactory dtoFactory, Class<? extends AbstractResource> targetType, Link<?> x) {
         targetName = x.getName();
         
         href = dtoFactory.uri(targetType, x.getId());

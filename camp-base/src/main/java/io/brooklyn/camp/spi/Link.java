@@ -1,4 +1,4 @@
-package io.brooklyn.camp.impl;
+package io.brooklyn.camp.spi;
 
 public class Link<T> {
 

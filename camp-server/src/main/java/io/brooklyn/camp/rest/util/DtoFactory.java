@@ -4,14 +4,14 @@ import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.dto.ApplicationComponentTemplateDto;
 import io.brooklyn.camp.dto.PlatformComponentTemplateDto;
 import io.brooklyn.camp.dto.PlatformDto;
-import io.brooklyn.camp.impl.ApplicationComponentTemplate;
-import io.brooklyn.camp.impl.BasicResource;
-import io.brooklyn.camp.impl.PlatformComponentTemplate;
-import io.brooklyn.camp.impl.PlatformRootSummary;
 import io.brooklyn.camp.rest.resource.AbstractCampRestResource;
 import io.brooklyn.camp.rest.resource.ApplicationComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformRestResource;
+import io.brooklyn.camp.spi.AbstractResource;
+import io.brooklyn.camp.spi.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.PlatformComponentTemplate;
+import io.brooklyn.camp.spi.PlatformRootSummary;
 
 import java.util.Map;
 
@@ -19,7 +19,6 @@ import javax.ws.rs.Path;
 
 import brooklyn.util.collections.MutableMap;
 import brooklyn.util.net.Urls;
-import brooklyn.util.text.Strings;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
@@ -49,11 +48,11 @@ public class DtoFactory {
         return uriFactory;
     }
 
-    public String uri(BasicResource x) {
+    public String uri(AbstractResource x) {
         return getUriFactory().uri(x);
     }
         
-    public String uri(Class<? extends BasicResource> targetType, String id) {
+    public String uri(Class<? extends AbstractResource> targetType, String id) {
         return getUriFactory().uri(targetType, id);
     }
 
@@ -100,28 +99,28 @@ public class DtoFactory {
         /** registers a CAMP Resource type against a RestResource, generating the URI
          * by concatenating the @Path annotation on the RestResource with the ID of the CAMP resource */
         @SuppressWarnings({ "unchecked", "rawtypes" })
-        public synchronized <T extends BasicResource> void registerIdentifiableRestResource(Class<T> type, Class<? extends AbstractCampRestResource> restResource) {
+        public synchronized <T extends AbstractResource> void registerIdentifiableRestResource(Class<T> type, Class<? extends AbstractCampRestResource> restResource) {
             registerIdentityFunction(type, 
                     uriOfRestResource(restResource),
                     (Function) CampRestGuavas.IDENTITY_OF_REST_RESOURCE);
         }
         
-        public String uri(Class<? extends BasicResource> targetType, String id) {
+        public String uri(Class<? extends AbstractResource> targetType, String id) {
             return Preconditions.checkNotNull(registryId.get(targetType), 
-                    Strings.format("No REST ID converter registered for %s (id %s)", targetType, id))
+                    "No REST ID converter registered for %s (id %s)", targetType, id)
                     .apply(id);
         }
 
-        public String uri(BasicResource x) {
+        public String uri(AbstractResource x) {
             return Preconditions.checkNotNull(registryResource.get(x.getClass()), 
-                    Strings.format("No REST converter registered for %s (%s)", x.getClass(), x))
+                    "No REST converter registered for %s (%s)", x.getClass(), x)
                     .apply(x);
         }
         
         public String uriOfRestResource(Class<?> restResourceClass) {
             return Urls.mergePaths(uriBase, 
                     Preconditions.checkNotNull(restResourceClass.getAnnotation(Path.class),
-                            Strings.format("No @Path on type %s", restResourceClass))
+                            "No @Path on type %s", restResourceClass)
                     .value());
         }
             

@@ -1,6 +1,6 @@
 package io.brooklyn.camp.test.mock.web;
 
-import io.brooklyn.camp.impl.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.ApplicationComponentTemplate;
 
 
 public class MockWarComponent {

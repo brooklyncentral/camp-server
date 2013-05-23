@@ -1,11 +1,11 @@
-package io.brooklyn.camp.impl;
+package io.brooklyn.camp.spi;
 
 /** Holds the metadata (name, description, etc) for a CampPlatform.
  * Required to initialize a CampPlatform.
  * <p>
- * See {@link BasicResource} for more general information.
+ * See {@link AbstractResource} for more general information.
  */
-public class PlatformRootSummary extends BasicResource {
+public class PlatformRootSummary extends AbstractResource {
 
     public static final String CAMP_TYPE = "Platform";
     
@@ -38,7 +38,7 @@ public class PlatformRootSummary extends BasicResource {
         return new Builder<PlatformRootSummary>(CAMP_TYPE);
     }
     
-    public static class Builder<T extends PlatformRootSummary> extends BasicResource.Builder<T> {
+    public static class Builder<T extends PlatformRootSummary> extends AbstractResource.Builder<T> {
         
         protected Builder(String type) { super(type); }
         
