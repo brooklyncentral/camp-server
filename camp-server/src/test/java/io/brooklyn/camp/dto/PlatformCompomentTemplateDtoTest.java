@@ -1,8 +1,8 @@
 package io.brooklyn.camp.dto;
 
 import io.brooklyn.camp.CampPlatform;
-import io.brooklyn.camp.impl.PlatformComponentTemplate;
 import io.brooklyn.camp.rest.util.DtoFactory;
+import io.brooklyn.camp.spi.PlatformComponentTemplate;
 import io.brooklyn.camp.test.mock.web.MockAppServerComponent;
 import io.brooklyn.camp.test.mock.web.MockWebPlatform;
 import junit.framework.Assert;

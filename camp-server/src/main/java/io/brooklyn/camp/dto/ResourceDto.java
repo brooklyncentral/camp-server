@@ -1,8 +1,8 @@
 package io.brooklyn.camp.dto;
 
 import io.brooklyn.camp.commontypes.RepresentationSkew;
-import io.brooklyn.camp.impl.BasicResource;
 import io.brooklyn.camp.rest.util.DtoFactory;
+import io.brooklyn.camp.spi.AbstractResource;
 
 import java.util.Date;
 import java.util.List;
@@ -71,11 +71,11 @@ public class ResourceDto extends DtoCustomAttributes {
 
     // --- building ---
 
-    public static ResourceDto newInstance(DtoFactory dtoFactory, BasicResource x) {
+    public static ResourceDto newInstance(DtoFactory dtoFactory, AbstractResource x) {
         return new ResourceDto().newInstanceInitialization(dtoFactory, x);
     }
     
-    protected ResourceDto newInstanceInitialization(DtoFactory dtoFactory, BasicResource x) {
+    protected ResourceDto newInstanceInitialization(DtoFactory dtoFactory, AbstractResource x) {
         type = x.getType();
         name = x.getName();
 

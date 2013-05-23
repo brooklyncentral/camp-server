@@ -1,12 +1,12 @@
 package io.brooklyn.camp.test.platform;
 
 import io.brooklyn.camp.BasicCampPlatform;
-import io.brooklyn.camp.impl.ApplicationComponentTemplate;
-import io.brooklyn.camp.impl.BasicResource;
-import io.brooklyn.camp.impl.PlatformComponentTemplate;
+import io.brooklyn.camp.spi.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.AbstractResource;
+import io.brooklyn.camp.spi.PlatformComponentTemplate;
+import io.brooklyn.camp.spi.collection.ResolveableLink;
 import io.brooklyn.camp.test.mock.web.MockAppServerComponent;
 import io.brooklyn.camp.test.mock.web.MockWarComponent;
-import io.brooklyn.camp.util.collection.ResolveableLink;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -59,7 +59,7 @@ public class BasicCampPlatformTest {
         Assert.assertNotNull(x.getName());
     }
 
-    public static void assertResourceFieldsNotNull(BasicResource x) {
+    public static void assertResourceFieldsNotNull(AbstractResource x) {
         Assert.assertNotNull(x.getId());
         Assert.assertNotNull(x.getType());
         Assert.assertNotNull(x.getCreated());

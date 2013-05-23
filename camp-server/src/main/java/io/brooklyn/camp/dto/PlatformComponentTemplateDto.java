@@ -1,7 +1,7 @@
 package io.brooklyn.camp.dto;
 
-import io.brooklyn.camp.impl.PlatformComponentTemplate;
 import io.brooklyn.camp.rest.util.DtoFactory;
+import io.brooklyn.camp.spi.PlatformComponentTemplate;
 
 public class PlatformComponentTemplateDto extends ResourceDto {
 

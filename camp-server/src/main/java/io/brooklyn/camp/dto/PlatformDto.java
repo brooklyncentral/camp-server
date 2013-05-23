@@ -1,11 +1,11 @@
 package io.brooklyn.camp.dto;
 
-import io.brooklyn.camp.impl.ApplicationComponentTemplate;
-import io.brooklyn.camp.impl.Link;
-import io.brooklyn.camp.impl.PlatformComponentTemplate;
-import io.brooklyn.camp.impl.PlatformRootSummary;
 import io.brooklyn.camp.rest.resource.ApidocRestResource;
 import io.brooklyn.camp.rest.util.DtoFactory;
+import io.brooklyn.camp.spi.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.Link;
+import io.brooklyn.camp.spi.PlatformComponentTemplate;
+import io.brooklyn.camp.spi.PlatformRootSummary;
 
 import java.util.ArrayList;
 import java.util.List;

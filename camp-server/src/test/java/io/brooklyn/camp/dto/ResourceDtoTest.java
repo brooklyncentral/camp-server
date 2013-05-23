@@ -3,8 +3,8 @@ package io.brooklyn.camp.dto;
 import io.brooklyn.camp.BasicCampPlatform;
 import io.brooklyn.camp.CampServer;
 import io.brooklyn.camp.commontypes.RepresentationSkew;
-import io.brooklyn.camp.impl.BasicResource;
 import io.brooklyn.camp.rest.util.CampRestGuavas;
+import io.brooklyn.camp.spi.AbstractResource;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -21,13 +21,13 @@ public class ResourceDtoTest {
 //    private static final Logger log = LoggerFactory.getLogger(ResourceDtoTest.class);
     
     CampServer s;
-    BasicResource rr;
+    AbstractResource rr;
     ResourceDto r;
     
     protected void initSimpleDto() {
         s = new CampServer(new BasicCampPlatform(), "http://atest/");
-        s.getDtoFactory().getUriFactory().registerIdentityFunction(BasicResource.class, "basic", CampRestGuavas.IDENTITY_OF_REST_RESOURCE);
-        rr = BasicResource.builder().name("Name").description("a description").
+        s.getDtoFactory().getUriFactory().registerIdentityFunction(AbstractResource.class, "basic", CampRestGuavas.IDENTITY_OF_REST_RESOURCE);
+        rr = AbstractResource.builder().name("Name").description("a description").
                 tags(Arrays.asList("tag1", "tag 2")).representationSkew(RepresentationSkew.NONE).build();
         r = ResourceDto.newInstance(s.getDtoFactory(), rr);
     }

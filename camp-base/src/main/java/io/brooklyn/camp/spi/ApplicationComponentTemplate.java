@@ -1,12 +1,12 @@
-package io.brooklyn.camp.impl;
+package io.brooklyn.camp.spi;
 
 
 /** Holds the metadata (name, description, etc) for a PCT
  * as well as fields pointing to behaviour (eg creation of PlatformComponent).
  * <p>
- * See {@link BasicResource} for more general information.
+ * See {@link AbstractResource} for more general information.
  */
-public class ApplicationComponentTemplate extends BasicResource {
+public class ApplicationComponentTemplate extends AbstractResource {
 
     public static final String CAMP_TYPE = "ApplicationComponentTemplate";
     static { assert CAMP_TYPE.equals(ApplicationComponentTemplate.class.getSimpleName()); }
@@ -24,7 +24,7 @@ public class ApplicationComponentTemplate extends BasicResource {
         return new Builder<ApplicationComponentTemplate>(CAMP_TYPE);
     }
     
-    public static class Builder<T extends ApplicationComponentTemplate> extends BasicResource.Builder<T> {
+    public static class Builder<T extends ApplicationComponentTemplate> extends AbstractResource.Builder<T> {
         
         protected Builder(String type) { super(type); }
         
