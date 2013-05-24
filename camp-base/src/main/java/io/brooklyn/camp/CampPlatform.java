@@ -1,26 +1,21 @@
 package io.brooklyn.camp;
 
-import io.brooklyn.camp.impl.ApplicationComponentTemplate;
-import io.brooklyn.camp.impl.PlatformComponentTemplate;
-import io.brooklyn.camp.impl.PlatformRootSummary;
-import io.brooklyn.camp.util.collection.AbstractResourceListProvider;
+import com.google.common.base.Preconditions;
+
+import io.brooklyn.camp.spi.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.PlatformComponentTemplate;
+import io.brooklyn.camp.spi.PlatformRootSummary;
+import io.brooklyn.camp.spi.collection.ResourceLookup;
 
 public abstract class CampPlatform {
 
-    private PlatformRootSummary root;
+    private final PlatformRootSummary root;
 
-    public CampPlatform() {
-        root = initializeRoot();
+    public CampPlatform(PlatformRootSummary root) {
+        this.root = Preconditions.checkNotNull(root, "root");
     }
 
     // --- root
-    
-    /** default root creation; intended to be overridden */
-    protected PlatformRootSummary initializeRoot() {
-        return PlatformRootSummary.builder().
-                name("CAMP Platform").
-                build();
-    }
     
     public PlatformRootSummary root() {
         return root;
@@ -28,8 +23,8 @@ public abstract class CampPlatform {
 
     // --- extension hooks
     
-    public abstract AbstractResourceListProvider<PlatformComponentTemplate> platformComponentTemplates();
-    public abstract AbstractResourceListProvider<ApplicationComponentTemplate> applicationComponentTemplates();
+    public abstract ResourceLookup<PlatformComponentTemplate> platformComponentTemplates();
+    public abstract ResourceLookup<ApplicationComponentTemplate> applicationComponentTemplates();
     
 
 }

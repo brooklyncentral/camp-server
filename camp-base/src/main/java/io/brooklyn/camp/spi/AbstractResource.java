@@ -1,4 +1,4 @@
-package io.brooklyn.camp.impl;
+package io.brooklyn.camp.spi;
 
 import io.brooklyn.camp.commontypes.RepresentationSkew;
 
@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableList;
  * so where fields can change callers should use a new builder
  * (or update an underlying data store).
  */
-public class BasicResource {
+public class AbstractResource {
 
     public static final String CAMP_TYPE = "Resource";
     
@@ -34,7 +34,7 @@ public class BasicResource {
     private RepresentationSkew representationSkew;
     
     /** Use {@link #builder()} to create */
-    protected BasicResource() {}
+    protected AbstractResource() {}
     
     // getters
 
@@ -87,8 +87,8 @@ public class BasicResource {
             
     // builder
     
-    public static Builder<? extends BasicResource> builder() {
-        return new Builder<BasicResource>(CAMP_TYPE);
+    public static Builder<? extends AbstractResource> builder() {
+        return new Builder<AbstractResource>(CAMP_TYPE);
     }
     
     /** Builder creates the instance up front to avoid repetition of fields in the builder;
@@ -96,7 +96,7 @@ public class BasicResource {
      * so effectively immutable.
      * <p>
      * Similarly setters in the class are private so those objects are also typically effectively immutable. */
-    public static class Builder<T extends BasicResource> {
+    public static class Builder<T extends AbstractResource> {
         
         private boolean built = false;
         private String type = null;
@@ -108,7 +108,7 @@ public class BasicResource {
         
         @SuppressWarnings("unchecked")
         protected T createResource() {
-            return (T) new BasicResource();
+            return (T) new AbstractResource();
         }
         
         protected synchronized T instance() {

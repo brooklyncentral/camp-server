@@ -1,6 +1,6 @@
-package io.brooklyn.camp.util.collection;
+package io.brooklyn.camp.spi.collection;
 
-import io.brooklyn.camp.impl.BasicResource;
+import io.brooklyn.camp.spi.AbstractResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 import brooklyn.util.collections.MutableMap;
 
-public class BasicResourceListProvider<T extends BasicResource> extends AbstractResourceListProvider<T> {
+public class BasicResourceLookup<T extends AbstractResource> extends AbstractResourceLookup<T> {
 
     Map<String,T> items = new MutableMap<String,T>();
     Map<String,ResolveableLink<T>> links = new MutableMap<String,ResolveableLink<T>>();

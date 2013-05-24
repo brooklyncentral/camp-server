@@ -1,20 +1,29 @@
 package io.brooklyn.camp;
 
-import io.brooklyn.camp.impl.ApplicationComponentTemplate;
-import io.brooklyn.camp.impl.PlatformComponentTemplate;
-import io.brooklyn.camp.util.collection.BasicResourceListProvider;
+import io.brooklyn.camp.spi.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.PlatformComponentTemplate;
+import io.brooklyn.camp.spi.PlatformRootSummary;
+import io.brooklyn.camp.spi.collection.BasicResourceLookup;
 
 public class BasicCampPlatform extends CampPlatform {
 
-    BasicResourceListProvider<PlatformComponentTemplate> platformComponentTemplates = new BasicResourceListProvider<PlatformComponentTemplate>();
-    BasicResourceListProvider<ApplicationComponentTemplate> applicationComponentTemplates = new BasicResourceListProvider<ApplicationComponentTemplate>();
+    public BasicCampPlatform() {
+        this(PlatformRootSummary.builder().name("CAMP Platform").build());
+    }
     
-    public BasicResourceListProvider<PlatformComponentTemplate> platformComponentTemplates() {
+    public BasicCampPlatform(PlatformRootSummary root) {
+        super(root);
+    }
+
+    BasicResourceLookup<PlatformComponentTemplate> platformComponentTemplates = new BasicResourceLookup<PlatformComponentTemplate>();
+    BasicResourceLookup<ApplicationComponentTemplate> applicationComponentTemplates = new BasicResourceLookup<ApplicationComponentTemplate>();
+    
+    public BasicResourceLookup<PlatformComponentTemplate> platformComponentTemplates() {
         return platformComponentTemplates;
     }
 
     @Override
-    public BasicResourceListProvider<ApplicationComponentTemplate> applicationComponentTemplates() {
+    public BasicResourceLookup<ApplicationComponentTemplate> applicationComponentTemplates() {
         return applicationComponentTemplates;
     }
 

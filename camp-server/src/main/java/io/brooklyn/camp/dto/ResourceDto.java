@@ -1,8 +1,8 @@
 package io.brooklyn.camp.dto;
 
 import io.brooklyn.camp.commontypes.RepresentationSkew;
-import io.brooklyn.camp.impl.BasicResource;
 import io.brooklyn.camp.rest.util.DtoFactory;
+import io.brooklyn.camp.spi.AbstractResource;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +18,19 @@ import com.fasterxml.jackson.databind.util.ISO8601Utils;
 
 public class ResourceDto extends DtoCustomAttributes {
 
+    protected ResourceDto() {}
+    protected ResourceDto(DtoFactory dtoFactory, AbstractResource x) {
+        type = x.getType();
+        name = x.getName();
+
+        description = x.getDescription();
+        setCreated(x.getCreated());
+        tags = x.getTags();
+        representationSkew = x.getRepresentationSkew();
+        
+        uri = dtoFactory.uri(x);
+    }
+    
     private String uri;
     private String type;
     
@@ -71,21 +84,8 @@ public class ResourceDto extends DtoCustomAttributes {
 
     // --- building ---
 
-    public static ResourceDto newInstance(DtoFactory dtoFactory, BasicResource x) {
-        return new ResourceDto().newInstanceInitialization(dtoFactory, x);
+    public static ResourceDto newInstance(DtoFactory dtoFactory, AbstractResource x) {
+        return new ResourceDto(dtoFactory, x);
     }
     
-    protected ResourceDto newInstanceInitialization(DtoFactory dtoFactory, BasicResource x) {
-        type = x.getType();
-        name = x.getName();
-
-        description = x.getDescription();
-        setCreated(x.getCreated());
-        tags = x.getTags();
-        representationSkew = x.getRepresentationSkew();
-        
-        uri = dtoFactory.uri(x);
-        return this;
-    }
-
 }
