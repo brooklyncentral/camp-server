@@ -11,14 +11,14 @@ import brooklyn.util.collections.MutableMap;
 public class BasicResourceLookup<T extends AbstractResource> extends AbstractResourceLookup<T> {
 
     Map<String,T> items = new MutableMap<String,T>();
-    Map<String,ResolveableLink<T>> links = new MutableMap<String,ResolveableLink<T>>();
+    Map<String,ResolvableLink<T>> links = new MutableMap<String,ResolvableLink<T>>();
     
     public T get(String id) {
         return items.get(id);
     }
 
-    public synchronized List<ResolveableLink<T>> links() {
-        return new ArrayList<ResolveableLink<T>>(links.values());
+    public synchronized List<ResolvableLink<T>> links() {
+        return new ArrayList<ResolvableLink<T>>(links.values());
     }
 
     public synchronized void add(T item) {
