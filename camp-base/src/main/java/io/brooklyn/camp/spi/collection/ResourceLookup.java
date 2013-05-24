@@ -8,6 +8,6 @@ public interface ResourceLookup<T extends AbstractResource> {
 
     public abstract T get(String id);
     
-    public abstract List<ResolveableLink<T>> links();
+    public abstract List<ResolvableLink<T>> links();
 
 }
