@@ -20,6 +20,10 @@ import com.google.common.collect.ImmutableList;
  * The resulting instances are typically immutable,
  * so where fields can change callers should use a new builder
  * (or update an underlying data store).
+ * <p>
+ * This class is not meant to be instantiated directly, as
+ * CAMP only uses defined subclasses (ie containing these fields).
+ * It is instantiable for testing.
  */
 public class AbstractResource {
 

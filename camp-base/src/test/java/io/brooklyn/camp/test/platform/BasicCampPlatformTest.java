@@ -4,7 +4,7 @@ import io.brooklyn.camp.BasicCampPlatform;
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
 import io.brooklyn.camp.spi.AbstractResource;
 import io.brooklyn.camp.spi.PlatformComponentTemplate;
-import io.brooklyn.camp.spi.collection.ResolveableLink;
+import io.brooklyn.camp.spi.collection.ResolvableLink;
 import io.brooklyn.camp.test.mock.web.MockAppServerComponent;
 import io.brooklyn.camp.test.mock.web.MockWarComponent;
 
@@ -28,7 +28,7 @@ public class BasicCampPlatformTest {
         assertResourceFieldsNotNull(p.root());
         
         Assert.assertEquals(p.platformComponentTemplates().links().size(), 1);
-        ResolveableLink<PlatformComponentTemplate> l = p.platformComponentTemplates().links().get(0);
+        ResolvableLink<PlatformComponentTemplate> l = p.platformComponentTemplates().links().get(0);
         assertLinkFieldsNotNull(l);
         Assert.assertEquals(l.getName(), MockAppServerComponent.class.getCanonicalName());
         
@@ -45,7 +45,7 @@ public class BasicCampPlatformTest {
         
         Assert.assertEquals(p.platformComponentTemplates().links().size(), 0);
         Assert.assertEquals(p.applicationComponentTemplates().links().size(), 1);
-        ResolveableLink<ApplicationComponentTemplate> l = p.applicationComponentTemplates().links().get(0);
+        ResolvableLink<ApplicationComponentTemplate> l = p.applicationComponentTemplates().links().get(0);
         assertLinkFieldsNotNull(l);
         Assert.assertEquals(l.getName(), MockWarComponent.class.getCanonicalName());
         
@@ -54,7 +54,7 @@ public class BasicCampPlatformTest {
     }        
 
 
-    public static void assertLinkFieldsNotNull(ResolveableLink<?> x) {
+    public static void assertLinkFieldsNotNull(ResolvableLink<?> x) {
         Assert.assertNotNull(x.getId());
         Assert.assertNotNull(x.getName());
     }
