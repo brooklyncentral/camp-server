@@ -26,7 +26,7 @@ public class ApplicationComponentTemplateRestResource extends AbstractCampRestRe
     public ApplicationComponentTemplateDto get(
             @ApiParam(value = "ID of item being retrieved", required = true)
             @PathParam("id") String id) {
-        return dto().adapt(lookup(camp().applicationComponentTemplates(), id));
+        return dtoFactory.adapt(lookup(campPlatform.applicationComponentTemplates(), id));
     }
 
 }

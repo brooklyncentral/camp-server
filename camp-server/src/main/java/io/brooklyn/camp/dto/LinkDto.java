@@ -45,7 +45,7 @@ public class LinkDto extends DtoCustomAttributes {
         return x;
     }
     
-    public static LinkDto newInstance(String href, String targetName, Map<String,? extends Object> customAttributes) {
+    public static LinkDto newInstance(String href, String targetName, Map<String, ?> customAttributes) {
         LinkDto x = newInstance(href, targetName);
         x.newInstanceCustomAttributes(customAttributes);
         return x;

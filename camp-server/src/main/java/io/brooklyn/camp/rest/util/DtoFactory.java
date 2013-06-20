@@ -15,6 +15,9 @@ import io.brooklyn.camp.spi.PlatformRootSummary;
 
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.ws.rs.Path;
 
 import brooklyn.util.collections.MutableMap;
@@ -23,6 +26,7 @@ import brooklyn.util.net.Urls;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 
+@Singleton
 public class DtoFactory {
 
     private CampPlatform platform;
@@ -30,7 +34,8 @@ public class DtoFactory {
     
     private UriFactory uriFactory;
 
-    public DtoFactory(CampPlatform campPlatform, String uriBase) {
+    @Inject
+    public DtoFactory(CampPlatform campPlatform, @Named("uriBase") String uriBase) {
         this.platform = campPlatform;
         this.uriBase = uriBase;
         
