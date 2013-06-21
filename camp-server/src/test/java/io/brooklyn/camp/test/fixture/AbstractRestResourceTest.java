@@ -1,68 +1,49 @@
 package io.brooklyn.camp.test.fixture;
 
-import java.net.URL;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.google.common.collect.Maps;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.servlet.GuiceFilter;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.test.framework.AppDescriptor;
+import com.sun.jersey.test.framework.JerseyTest;
+import com.sun.jersey.test.framework.WebAppDescriptor;
 
 import io.brooklyn.camp.BasicCampPlatform;
-import io.brooklyn.camp.CampServer;
+import io.brooklyn.camp.CampPlatform;
+import io.brooklyn.camp.CampServletModule;
 import io.brooklyn.camp.test.mock.web.MockWebPlatform;
 
-import org.junit.AfterClass;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.annotations.BeforeClass;
-import org.testng.reporters.Files;
+public class AbstractRestResourceTest extends JerseyTest {
 
-import brooklyn.util.exceptions.Exceptions;
-import brooklyn.util.net.Urls;
+    @Override
+    public AppDescriptor configure() {
+        Injector injector = Guice.createInjector(new CampServletModule());
+        CampPlatform platform = injector.getInstance(CampPlatform.class);
+        MockWebPlatform.populate((BasicCampPlatform) platform);
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-public class AbstractRestResourceTest {
-
-    private static final Logger log = LoggerFactory.getLogger(AbstractRestResourceTest.class);
-    
-    protected BasicCampPlatform platform;
-    protected CampServer server;
-    
-    @BeforeClass
-    public void startServer() {
-        platform = new BasicCampPlatform();
-        populate();
-        
-        // new server
-        server = new CampServer(platform, "").start();
-    }
-    
-    protected void populate() {
-        MockWebPlatform.populate(platform);
+        return new WebAppDescriptor.Builder()
+            .filterClass(GuiceFilter.class)
+            .servletPath("/")
+            .clientConfig(new DefaultClientConfig(JacksonJaxbJsonProvider.class))
+            .build();
     }
 
-    @AfterClass 
-    public void stopServer() {
-        if (server!=null)
-            server.stop();
+    public WebResource resource(String path) {
+        return resource(path, Maps.<String, String>newHashMap());
     }
-    
-    public String load(String path) {
-        try {
-            String base = "http://localhost:"+server.getPort();
-            String x = path.startsWith(base) ? path : Urls.mergePaths(base, path);
-            log.debug("Reading from: "+x);
-            String s = Files.streamToString(new URL(x).openStream());
-            log.debug("Result from "+x+": "+s);
-            return s;
-        } catch (Exception e) {
-            throw Exceptions.propagate(e);
+
+    public WebResource resource(String path, Map<String, String> queryParams) {
+        WebResource resource = resource().path(path);
+        for (Entry<String, String> entry : queryParams.entrySet()) {
+            resource = resource.queryParam(entry.getKey(), entry.getValue());
         }
+        return resource;
     }
-    
-    public <T> T load(String path, Class<T> type) {
-        try {
-            String data = load(path);
-            return new ObjectMapper().readValue(data, type);
-        } catch (Exception e) {
-            throw Exceptions.propagate(e);
-        }
-    }
-    
+
 }
