@@ -13,8 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Test
 public class LinkDtoTest {
 
-//    private static final Logger log = LoggerFactory.getLogger(LinkDtoTest.class);
-    
     @Test
     public void testSimple() throws IOException {
         LinkDto l = LinkDto.newInstance("http://foo", "Foo");

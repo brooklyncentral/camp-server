@@ -17,7 +17,7 @@ public class DtoCustomAttributes extends DtoBase {
 
     protected DtoCustomAttributes() {}
     
-    public DtoCustomAttributes(Map<String,? extends Object> customAttributes) {
+    public DtoCustomAttributes(Map<String, ?> customAttributes) {
         this.customAttributes = customAttributes==null ? ImmutableMap.<String, Object>of() : ImmutableMap.copyOf(customAttributes);
     }
     
@@ -40,7 +40,7 @@ public class DtoCustomAttributes extends DtoBase {
 
     // --- building ---
 
-    protected void newInstanceCustomAttributes(Map<String, ? extends Object> customAttributes) {
+    protected void newInstanceCustomAttributes(Map<String, ?> customAttributes) {
         if (customAttributes!=null)
             this.customAttributes.putAll(customAttributes);
     }

@@ -53,8 +53,8 @@ public class DtoFactory {
         return uriFactory;
     }
 
-    public String uri(AbstractResource x) {
-        return getUriFactory().uri(x);
+    public String uri(AbstractResource resource) {
+        return getUriFactory().uri(resource);
     }
         
     public String uri(Class<? extends AbstractResource> targetType, String id) {
@@ -76,6 +76,7 @@ public class DtoFactory {
     public class UriFactory {
         /** registry of generating a URI given an object */
         Map<Class<?>,Function<Object,String>> registryResource = new MutableMap<Class<?>, Function<Object,String>>();
+
         /** registry of generating a URI given an ID */
         Map<Class<?>,Function<String,String>> registryId = new MutableMap<Class<?>, Function<String,String>>();
 
@@ -93,7 +94,7 @@ public class DtoFactory {
                     return Urls.mergePaths(resourceTypeUriBase, id);
                 }
             };
-            registryId.put(type, (Function<String, String>) fnUriFromId);
+            registryId.put(type, fnUriFromId);
             registerResourceUriFunction(type, new Function<T,String>() {
                 public String apply(T input) {
                     return fnUriFromId.apply(fnIdentity.apply(input));
@@ -105,7 +106,7 @@ public class DtoFactory {
          * by concatenating the @Path annotation on the RestResource with the ID of the CAMP resource */
         @SuppressWarnings({ "unchecked", "rawtypes" })
         public synchronized <T extends AbstractResource> void registerIdentifiableRestResource(Class<T> type, Class<? extends AbstractCampResource> restResource) {
-            registerIdentityFunction(type, 
+            registerIdentityFunction(type,
                     uriOfRestResource(restResource),
                     (Function) CampRestGuavas.IDENTITY_OF_REST_RESOURCE);
         }
@@ -116,14 +117,14 @@ public class DtoFactory {
                     .apply(id);
         }
 
-        public String uri(AbstractResource x) {
-            return Preconditions.checkNotNull(registryResource.get(x.getClass()), 
-                    "No REST converter registered for %s (%s)", x.getClass(), x)
-                    .apply(x);
+        public String uri(AbstractResource resource) {
+            return Preconditions.checkNotNull(registryResource.get(resource.getClass()),
+                    "No REST converter registered for %s (%s)", resource.getClass(), resource)
+                    .apply(resource);
         }
         
         public String uriOfRestResource(Class<?> restResourceClass) {
-            return Urls.mergePaths(uriBase, 
+            return Urls.mergePaths(uriBase,
                     Preconditions.checkNotNull(restResourceClass.getAnnotation(Path.class),
                             "No @Path on type %s", restResourceClass)
                     .value());

@@ -16,9 +16,17 @@ public class PlatformDto extends ResourceDto {
     public static final String CLASS_NAME = "io.brooklyn.camp.dto.PlatformDto";
     static { assert CLASS_NAME.equals(PlatformDto.class.getCanonicalName()); }
 
+    // TODO add custom fields
+    private List<LinkDto> platformComponentTemplates;
+    private List<LinkDto> applicationComponentTemplates;
+
+    // non-CAMP, but useful
+    private LinkDto apidoc;
+
     protected PlatformDto() {}
-    protected PlatformDto(DtoFactory dtoFactory, PlatformRootSummary x) {
-        super(dtoFactory, x);
+
+    protected PlatformDto(DtoFactory dtoFactory, PlatformRootSummary rootSummary) {
+        super(dtoFactory, rootSummary);
         platformComponentTemplates = new ArrayList<LinkDto>();
         for (Link<PlatformComponentTemplate> t: dtoFactory.getPlatform().platformComponentTemplates().links()) {
             platformComponentTemplates.add(LinkDto.newInstance(dtoFactory, PlatformComponentTemplate.class, t));
@@ -36,13 +44,6 @@ public class PlatformDto extends ResourceDto {
                 "API documentation");
     }
 
-    // TODO add custom fields
-    private List<LinkDto> platformComponentTemplates;
-    private List<LinkDto> applicationComponentTemplates;
-    
-    // non-CAMP, but useful
-    private LinkDto apidoc;
-    
     public List<LinkDto> getPlatformComponentTemplates() {
         return platformComponentTemplates;
     }
@@ -57,8 +58,8 @@ public class PlatformDto extends ResourceDto {
     
     // --- building ---
 
-    public static PlatformDto newInstance(DtoFactory dtoFactory, PlatformRootSummary x) {
-        return new PlatformDto(dtoFactory, x);
+    public static PlatformDto newInstance(DtoFactory dtoFactory, PlatformRootSummary rootSummary) {
+        return new PlatformDto(dtoFactory, rootSummary);
     }
 
 }

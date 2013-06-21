@@ -9,18 +9,18 @@ public class PlatformComponentTemplateDto extends ResourceDto {
     public static final String CLASS_NAME = "io.brooklyn.camp.dto.PlatformComponentTemplateDto";
     static { assert CLASS_NAME.equals(PlatformComponentTemplateDto.class.getCanonicalName()); }
  
+    // TODO add custom fields
+
     protected PlatformComponentTemplateDto() {}
-    protected PlatformComponentTemplateDto(DtoFactory dtoFactory, PlatformComponentTemplate x) {
-        super(dtoFactory, x);
+    protected PlatformComponentTemplateDto(DtoFactory dtoFactory, PlatformComponentTemplate template) {
+        super(dtoFactory, template);
         // TODO set custom fields
     }
  
-    // TODO add custom fields
-    
     // --- building ---
 
-    public static PlatformComponentTemplateDto newInstance(DtoFactory dtoFactory, PlatformComponentTemplate x) {
-        return new PlatformComponentTemplateDto(dtoFactory, x);
+    public static PlatformComponentTemplateDto newInstance(DtoFactory dtoFactory, PlatformComponentTemplate template) {
+        return new PlatformComponentTemplateDto(dtoFactory, template);
     }
     
 }

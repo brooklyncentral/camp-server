@@ -134,14 +134,41 @@ public class AbstractResource {
             built = true;
             return result;
         }
-        
-        public Builder<T> type(String x) { instance().setType(x); return this; }
-        public Builder<T> id(String x) { instance().setId(x); return this; }
-        public Builder<T> name(String x) { instance().setName(x); return this; }
-        public Builder<T> description(String x) { instance().setDescription(x); return this; }
-        public Builder<T> created(Date x) { instance().setCreated(x); return this; }
-        public Builder<T> tags(List<String> x) { instance().setTags(x); return this; }
-        public Builder<T> representationSkew(RepresentationSkew x) { instance().setRepresentationSkew(x); return this; }
+
+        public Builder<T> type(String type) {
+            instance().setType(type);
+            return this;
+        }
+
+        public Builder<T> id(String id) {
+            instance().setId(id);
+            return this;
+        }
+
+        public Builder<T> name(String name) {
+            instance().setName(name);
+            return this;
+        }
+
+        public Builder<T> description(String description) {
+            instance().setDescription(description);
+            return this;
+        }
+
+        public Builder<T> created(Date created) {
+            instance().setCreated(created);
+            return this;
+        }
+
+        public Builder<T> tags(List<String> tags) {
+            instance().setTags(tags);
+            return this;
+        }
+
+        public Builder<T> representationSkew(RepresentationSkew skew) {
+            instance().setRepresentationSkew(skew);
+            return this;
+        }
     }
     
 }
