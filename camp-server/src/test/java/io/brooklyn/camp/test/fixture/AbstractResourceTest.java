@@ -19,7 +19,7 @@ import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.CampServletModule;
 import io.brooklyn.camp.test.mock.web.MockWebPlatform;
 
-public class AbstractRestResourceTest extends JerseyTest {
+public class AbstractResourceTest extends JerseyTest {
 
     @Override
     public AppDescriptor configure() {

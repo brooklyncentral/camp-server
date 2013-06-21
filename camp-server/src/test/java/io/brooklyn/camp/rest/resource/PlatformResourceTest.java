@@ -9,16 +9,16 @@ import org.testng.annotations.Test;
 
 import io.brooklyn.camp.dto.PlatformComponentTemplateDto;
 import io.brooklyn.camp.dto.PlatformDto;
-import io.brooklyn.camp.test.fixture.AbstractRestResourceTest;
+import io.brooklyn.camp.test.fixture.AbstractResourceTest;
 
-public class PlatformRestResourceTest extends AbstractRestResourceTest {
+public class PlatformResourceTest extends AbstractResourceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(PlatformRestResourceTest.class);
+    private static final Logger log = LoggerFactory.getLogger(PlatformResourceTest.class);
     
     @Test
     public void testPlatformIncludesList() {
 
-        PlatformDto p = resource(PlatformRestResource.CAMP_URI_PATH)
+        PlatformDto p = resource(PlatformResource.CAMP_URI_PATH)
                                 .get(PlatformDto.class);
         assertFalse(p.getPlatformComponentTemplates().isEmpty());
 

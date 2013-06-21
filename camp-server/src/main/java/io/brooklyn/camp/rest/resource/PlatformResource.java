@@ -11,10 +11,10 @@ import brooklyn.rest.apidoc.Apidoc;
 
 import com.wordnik.swagger.core.ApiOperation;
 
-@Path(PlatformRestResource.CAMP_URI_PATH)
+@Path(PlatformResource.CAMP_URI_PATH)
 @Apidoc("Platform (root)")
 @Produces(MediaType.APPLICATION_JSON)
-public class PlatformRestResource extends AbstractCampRestResource {
+public class PlatformResource extends AbstractCampResource {
 
     public static final String CAMP_URI_PATH = "/camp/v11";
     

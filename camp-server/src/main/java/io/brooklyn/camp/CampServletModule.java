@@ -11,10 +11,7 @@ import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import brooklyn.rest.apidoc.ApidocHelpMessageBodyWriter;
-import io.brooklyn.camp.rest.resource.ApidocRestResource;
-import io.brooklyn.camp.rest.resource.ApplicationComponentTemplateRestResource;
-import io.brooklyn.camp.rest.resource.PlatformComponentTemplateRestResource;
-import io.brooklyn.camp.rest.resource.PlatformRestResource;
+import io.brooklyn.camp.rest.resource.ApidocResource;
 
 public class CampServletModule extends ServletModule {
 
@@ -23,7 +20,7 @@ public class CampServletModule extends ServletModule {
         // Resources. Most resources are bound through com.sun.jerey.config.property.packages
         // configuration given to GuiceContainer below.
         bind(ApidocHelpMessageBodyWriter.class).toInstance(new ApidocHelpMessageBodyWriter());
-        bind(ApidocRestResource.class).toInstance(new ApidocRestResource());
+        bind(ApidocResource.class).toInstance(new ApidocResource());
 
         // Config
         bind(String.class)

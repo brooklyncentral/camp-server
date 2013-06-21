@@ -1,6 +1,6 @@
 package io.brooklyn.camp.dto;
 
-import io.brooklyn.camp.rest.resource.ApidocRestResource;
+import io.brooklyn.camp.rest.resource.ApidocResource;
 import io.brooklyn.camp.rest.util.DtoFactory;
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
 import io.brooklyn.camp.spi.Link;
@@ -32,7 +32,7 @@ public class PlatformDto extends ResourceDto {
         // TODO set custom fields
 
         apidoc = LinkDto.newInstance(
-                dtoFactory.getUriFactory().uriOfRestResource(ApidocRestResource.class),
+                dtoFactory.getUriFactory().uriOfRestResource(ApidocResource.class),
                 "API documentation");
     }
 

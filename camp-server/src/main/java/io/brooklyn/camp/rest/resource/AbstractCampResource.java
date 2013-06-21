@@ -8,7 +8,7 @@ import io.brooklyn.camp.rest.util.WebResourceUtils;
 import io.brooklyn.camp.spi.AbstractResource;
 import io.brooklyn.camp.spi.collection.ResourceLookup;
 
-public abstract class AbstractCampRestResource {
+public abstract class AbstractCampResource {
 
     @Inject
     DtoFactory dtoFactory;
