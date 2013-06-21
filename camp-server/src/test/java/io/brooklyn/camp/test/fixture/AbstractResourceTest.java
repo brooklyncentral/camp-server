@@ -21,14 +21,17 @@ import io.brooklyn.camp.test.mock.web.MockWebPlatform;
 
 public class AbstractResourceTest extends JerseyTest {
 
+    final String contextPath = "/camp";
+
     @Override
     public AppDescriptor configure() {
-        Injector injector = Guice.createInjector(new CampServletModule());
+        Injector injector = Guice.createInjector(new CampServletModule(contextPath));
         CampPlatform platform = injector.getInstance(CampPlatform.class);
         MockWebPlatform.populate((BasicCampPlatform) platform);
 
         return new WebAppDescriptor.Builder()
             .filterClass(GuiceFilter.class)
+            .contextPath(contextPath)
             .servletPath("/")
             .clientConfig(new DefaultClientConfig(JacksonJaxbJsonProvider.class))
             .build();
@@ -39,6 +42,9 @@ public class AbstractResourceTest extends JerseyTest {
     }
 
     public WebResource resource(String path, Map<String, String> queryParams) {
+        if (path.startsWith(contextPath)) {
+            path = path.substring(contextPath.length());
+        }
         WebResource resource = resource().path(path);
         for (Entry<String, String> entry : queryParams.entrySet()) {
             resource = resource.queryParam(entry.getKey(), entry.getValue());

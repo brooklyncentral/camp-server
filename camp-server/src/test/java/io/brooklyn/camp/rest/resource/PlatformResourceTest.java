@@ -17,16 +17,16 @@ public class PlatformResourceTest extends AbstractResourceTest {
     
     @Test
     public void testPlatformIncludesList() {
-
-        PlatformDto p = resource(PlatformResource.CAMP_URI_PATH)
-                                .get(PlatformDto.class);
+        PlatformDto p = resource("/v11").get(PlatformDto.class);
         assertFalse(p.getPlatformComponentTemplates().isEmpty());
 
         String linkedTemplate = p.getPlatformComponentTemplates().get(0).getHref();
+        log.debug("Linked template should be found at: " + linkedTemplate);
+
         PlatformComponentTemplateDto pct = resource(linkedTemplate)
                 .get(PlatformComponentTemplateDto.class);
 
-        log.debug("Loaded PCT via REST: "+pct);
+        log.debug("Loaded platform component template: " + pct);
         assertNotNull(pct.getName());
     }
         

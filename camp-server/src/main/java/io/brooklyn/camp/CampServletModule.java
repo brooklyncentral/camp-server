@@ -1,5 +1,7 @@
 package io.brooklyn.camp;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.util.Map;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
@@ -15,6 +17,20 @@ import io.brooklyn.camp.rest.resource.ApidocResource;
 
 public class CampServletModule extends ServletModule {
 
+    final String context;
+
+    /**
+     * Serves everything from /camp
+     */
+    public CampServletModule() {
+        this("/camp");
+    }
+
+    public CampServletModule(String context) {
+        checkArgument(!context.endsWith("/"), "Servlet context should not end with a /");
+        this.context = context;
+    }
+
     @Override
     protected void configureServlets() {
         // Resources. Most resources are bound through com.sun.jerey.config.property.packages
@@ -25,7 +41,7 @@ public class CampServletModule extends ServletModule {
         // Config
         bind(String.class)
                 .annotatedWith(Names.named("uriBase"))
-                .toInstance("");
+                .toInstance(context);
 
         // camp-base
         bind(CampPlatform.class).to(BasicCampPlatform.class).in(Scopes.SINGLETON);

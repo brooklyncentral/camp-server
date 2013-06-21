@@ -71,17 +71,17 @@ public class CampServer {
             throw new IllegalStateException("Already started");
         
         webAppContext = new WebAppContext();
-        webAppContext.setContextPath("/");
+        webAppContext.setContextPath(uriBase);
         webAppContext.setWar(
                 // TODO if there is a GUI or other war...
-                //findJsguiWebapp()!=null ? findJsguiWebapp() : 
+                //findJsguiWebapp()!=null ? findJsguiWebapp() :
                 createTempWebDirWithIndexHtml("CAMP REST API <p> (gui not available)"));
 
         FilterHolder filterHolder = new FilterHolder(filter);
         webAppContext.addFilter(filterHolder, "/*", EnumSet.allOf(DispatcherType.class));
 
         server = startServer(webAppContext, "CAMP server");
-        
+
         return this;
     }
 

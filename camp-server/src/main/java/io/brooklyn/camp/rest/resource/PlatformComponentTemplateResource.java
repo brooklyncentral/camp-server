@@ -13,12 +13,10 @@ import brooklyn.rest.apidoc.Apidoc;
 import com.wordnik.swagger.core.ApiOperation;
 import com.wordnik.swagger.core.ApiParam;
 
-@Path(PlatformComponentTemplateResource.URI_PATH)
+@Path("/v11/platform-component-templates")
 @Apidoc("Platform Component Template resources")
 @Produces(MediaType.APPLICATION_JSON)
 public class PlatformComponentTemplateResource extends AbstractCampResource {
-
-    public static final String URI_PATH = PlatformResource.CAMP_URI_PATH + "/platform-component-templates";
 
     @Path("/{id}")
     @ApiOperation(value = "Get a specific platform component template",
