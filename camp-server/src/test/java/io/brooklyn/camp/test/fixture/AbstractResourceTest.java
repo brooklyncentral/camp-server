@@ -2,6 +2,7 @@ package io.brooklyn.camp.test.fixture;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.google.common.collect.Maps;
@@ -17,11 +18,19 @@ import com.sun.jersey.test.framework.WebAppDescriptor;
 import io.brooklyn.camp.BasicCampPlatform;
 import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.CampServletModule;
+import io.brooklyn.camp.dto.PlatformDto;
 import io.brooklyn.camp.test.mock.web.MockWebPlatform;
 
 public class AbstractResourceTest extends JerseyTest {
 
     final String contextPath = "/camp";
+
+    /**
+     * TestNG creates all test class instances before running any tests. JerseyTest creates
+     * each test server immediately on class instantiation. Together, these cause port
+     * clashes and test failures. We work around this by giving each test its own port.
+     */
+    static final AtomicInteger perTestPort = new AtomicInteger(9080);
 
     @Override
     public AppDescriptor configure() {
@@ -35,6 +44,11 @@ public class AbstractResourceTest extends JerseyTest {
             .servletPath("/")
             .clientConfig(new DefaultClientConfig(JacksonJaxbJsonProvider.class))
             .build();
+    }
+
+    @Override
+    protected int getPort(int defaultPort) {
+        return perTestPort.incrementAndGet();
     }
 
     public WebResource resource(String path) {
@@ -52,4 +66,7 @@ public class AbstractResourceTest extends JerseyTest {
         return resource;
     }
 
+    public PlatformDto loadPlatform() {
+        return resource("/v11").get(PlatformDto.class);
+    }
 }

@@ -13,20 +13,20 @@ import io.brooklyn.camp.test.fixture.AbstractResourceTest;
 
 public class PlatformResourceTest extends AbstractResourceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(PlatformResourceTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PlatformResourceTest.class);
     
     @Test
-    public void testPlatformIncludesList() {
-        PlatformDto p = resource("/v11").get(PlatformDto.class);
+    public void testLoadPlatform() {
+        PlatformDto p = loadPlatform();
         assertFalse(p.getPlatformComponentTemplates().isEmpty());
-
+        assertFalse(p.getApplicationComponentTemplates().isEmpty());
         String linkedTemplate = p.getPlatformComponentTemplates().get(0).getHref();
-        log.debug("Linked template should be found at: " + linkedTemplate);
+        LOG.debug("Linked template should be found at: " + linkedTemplate);
 
         PlatformComponentTemplateDto pct = resource(linkedTemplate)
                 .get(PlatformComponentTemplateDto.class);
 
-        log.debug("Loaded platform component template: " + pct);
+        LOG.debug("Loaded platform component template: " + pct);
         assertNotNull(pct.getName());
     }
         
