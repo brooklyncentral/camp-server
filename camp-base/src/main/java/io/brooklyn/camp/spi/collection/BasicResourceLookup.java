@@ -41,4 +41,9 @@ public class BasicResourceLookup<T extends AbstractResource> extends AbstractRes
         return links.remove(id)!=null;
     }
     
+    public static <T extends AbstractResource> BasicResourceLookup<T> of(T ...items) {
+        BasicResourceLookup<T> result = new BasicResourceLookup<T>();
+        for (T item: items) result.add(item);
+        return result;
+    }
 }

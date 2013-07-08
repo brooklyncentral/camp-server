@@ -90,9 +90,9 @@ public class AbstractResource {
     }
             
     // builder
-    
-    public static Builder<? extends AbstractResource> builder() {
-        return new Builder<AbstractResource>(CAMP_TYPE);
+    @SuppressWarnings("rawtypes")
+    public static Builder<? extends AbstractResource,? extends Builder> builder() {
+        return new AbstractResourceBuilder(CAMP_TYPE);
     }
     
     /** Builder creates the instance up front to avoid repetition of fields in the builder;
@@ -100,7 +100,7 @@ public class AbstractResource {
      * so effectively immutable.
      * <p>
      * Similarly setters in the class are private so those objects are also typically effectively immutable. */
-    public static class Builder<T extends AbstractResource> {
+    public abstract static class Builder<T extends AbstractResource,U extends Builder<T,U>> {
         
         private boolean built = false;
         private String type = null;
@@ -135,13 +135,23 @@ public class AbstractResource {
             return result;
         }
         
-        public Builder<T> type(String x) { instance().setType(x); return this; }
-        public Builder<T> id(String x) { instance().setId(x); return this; }
-        public Builder<T> name(String x) { instance().setName(x); return this; }
-        public Builder<T> description(String x) { instance().setDescription(x); return this; }
-        public Builder<T> created(Date x) { instance().setCreated(x); return this; }
-        public Builder<T> tags(List<String> x) { instance().setTags(x); return this; }
-        public Builder<T> representationSkew(RepresentationSkew x) { instance().setRepresentationSkew(x); return this; }
+        @SuppressWarnings("unchecked")
+        protected U thisBuilder() { return (U)this; }
+        
+        public U type(String x) { instance().setType(x); return thisBuilder(); }
+        public U id(String x) { instance().setId(x); return thisBuilder(); }
+        public U name(String x) { instance().setName(x); return thisBuilder(); }
+        public U description(String x) { instance().setDescription(x); return thisBuilder(); }
+        public U created(Date x) { instance().setCreated(x); return thisBuilder(); }
+        public U tags(List<String> x) { instance().setTags(x); return thisBuilder(); }
+        public U representationSkew(RepresentationSkew x) { instance().setRepresentationSkew(x); return thisBuilder(); }
+    }
+
+    // only for testing
+    protected static class AbstractResourceBuilder extends Builder<AbstractResource,AbstractResourceBuilder> {
+        protected AbstractResourceBuilder(String type) {
+            super(type);
+        }
     }
     
 }

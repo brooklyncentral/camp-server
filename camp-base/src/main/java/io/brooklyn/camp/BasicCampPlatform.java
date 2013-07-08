@@ -1,6 +1,7 @@
 package io.brooklyn.camp;
 
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.AssemblyTemplate;
 import io.brooklyn.camp.spi.PlatformComponentTemplate;
 import io.brooklyn.camp.spi.PlatformRootSummary;
 import io.brooklyn.camp.spi.collection.BasicResourceLookup;
@@ -17,6 +18,7 @@ public class BasicCampPlatform extends CampPlatform {
 
     BasicResourceLookup<PlatformComponentTemplate> platformComponentTemplates = new BasicResourceLookup<PlatformComponentTemplate>();
     BasicResourceLookup<ApplicationComponentTemplate> applicationComponentTemplates = new BasicResourceLookup<ApplicationComponentTemplate>();
+    BasicResourceLookup<AssemblyTemplate> assemblyTemplates = new BasicResourceLookup<AssemblyTemplate>();
     
     public BasicResourceLookup<PlatformComponentTemplate> platformComponentTemplates() {
         return platformComponentTemplates;
@@ -27,4 +29,8 @@ public class BasicCampPlatform extends CampPlatform {
         return applicationComponentTemplates;
     }
 
+    public BasicResourceLookup<AssemblyTemplate> assemblyTemplates() {
+        return assemblyTemplates;
+    }
+    
 }

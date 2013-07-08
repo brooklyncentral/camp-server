@@ -102,6 +102,16 @@
             <version>${brooklyn.version}</version>
         </dependency>
         
+        <!-- TODO have a camp.log / logging module -->
+        <dependency>
+            <groupId>io.brooklyn</groupId>
+            <artifactId>brooklyn-logback-xml</artifactId>
+            <version>${brooklyn.version}</version>
+            <!-- optional so that this project has logging; dependencies may redeclare or supply their own -->
+            <optional>true</optional>
+        </dependency>
+        
+        
     </dependencies>
 
 </project>

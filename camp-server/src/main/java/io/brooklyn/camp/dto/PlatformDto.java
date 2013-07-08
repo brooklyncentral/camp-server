@@ -3,6 +3,7 @@ package io.brooklyn.camp.dto;
 import io.brooklyn.camp.rest.resource.ApidocRestResource;
 import io.brooklyn.camp.rest.util.DtoFactory;
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.AssemblyTemplate;
 import io.brooklyn.camp.spi.Link;
 import io.brooklyn.camp.spi.PlatformComponentTemplate;
 import io.brooklyn.camp.spi.PlatformRootSummary;
@@ -28,7 +29,12 @@ public class PlatformDto extends ResourceDto {
         for (Link<ApplicationComponentTemplate> t: dtoFactory.getPlatform().applicationComponentTemplates().links()) {
             applicationComponentTemplates.add(LinkDto.newInstance(dtoFactory, ApplicationComponentTemplate.class, t));
         }
-        
+
+        assemblyTemplates = new ArrayList<LinkDto>();
+        for (Link<AssemblyTemplate> t: dtoFactory.getPlatform().assemblyTemplates().links()) {
+            assemblyTemplates.add(LinkDto.newInstance(dtoFactory, AssemblyTemplate.class, t));
+        }
+
         // TODO set custom fields
 
         apidoc = LinkDto.newInstance(
@@ -37,11 +43,16 @@ public class PlatformDto extends ResourceDto {
     }
 
     // TODO add custom fields
+    private List<LinkDto> assemblyTemplates;
     private List<LinkDto> platformComponentTemplates;
     private List<LinkDto> applicationComponentTemplates;
     
     // non-CAMP, but useful
     private LinkDto apidoc;
+    
+    public List<LinkDto> getAssemblyTemplates() {
+        return assemblyTemplates;
+    }
     
     public List<LinkDto> getPlatformComponentTemplates() {
         return platformComponentTemplates;

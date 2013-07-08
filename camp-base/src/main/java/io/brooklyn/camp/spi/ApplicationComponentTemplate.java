@@ -24,14 +24,14 @@ public class ApplicationComponentTemplate extends AbstractResource {
         return new Builder<ApplicationComponentTemplate>(CAMP_TYPE);
     }
     
-    public static class Builder<T extends ApplicationComponentTemplate> extends AbstractResource.Builder<T> {
+    public static class Builder<T extends ApplicationComponentTemplate> extends AbstractResource.Builder<T,Builder<T>> {
         
         protected Builder(String type) { super(type); }
         
         @SuppressWarnings("unchecked")
         protected T createResource() { return (T) new ApplicationComponentTemplate(); }
         
-//        public Builder<T> foo(String x) { instance().setFoo(x); return this; }
+//        public Builder<T> foo(String x) { instance().setFoo(x); return thisBuilder(); }
     }
 
 }

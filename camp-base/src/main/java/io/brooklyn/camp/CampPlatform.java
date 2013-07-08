@@ -1,11 +1,12 @@
 package io.brooklyn.camp;
 
-import com.google.common.base.Preconditions;
-
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.AssemblyTemplate;
 import io.brooklyn.camp.spi.PlatformComponentTemplate;
 import io.brooklyn.camp.spi.PlatformRootSummary;
 import io.brooklyn.camp.spi.collection.ResourceLookup;
+
+import com.google.common.base.Preconditions;
 
 public abstract class CampPlatform {
 
@@ -25,6 +26,6 @@ public abstract class CampPlatform {
     
     public abstract ResourceLookup<PlatformComponentTemplate> platformComponentTemplates();
     public abstract ResourceLookup<ApplicationComponentTemplate> applicationComponentTemplates();
+    public abstract ResourceLookup<AssemblyTemplate> assemblyTemplates();
     
-
 }

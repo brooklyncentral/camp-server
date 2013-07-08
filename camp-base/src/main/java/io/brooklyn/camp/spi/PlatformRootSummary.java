@@ -38,7 +38,7 @@ public class PlatformRootSummary extends AbstractResource {
         return new Builder<PlatformRootSummary>(CAMP_TYPE);
     }
     
-    public static class Builder<T extends PlatformRootSummary> extends AbstractResource.Builder<T> {
+    public static class Builder<T extends PlatformRootSummary> extends AbstractResource.Builder<T,Builder<T>> {
         
         protected Builder(String type) { super(type); }
         

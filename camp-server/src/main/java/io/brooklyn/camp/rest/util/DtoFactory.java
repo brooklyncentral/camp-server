@@ -2,14 +2,17 @@ package io.brooklyn.camp.rest.util;
 
 import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.dto.ApplicationComponentTemplateDto;
+import io.brooklyn.camp.dto.AssemblyTemplateDto;
 import io.brooklyn.camp.dto.PlatformComponentTemplateDto;
 import io.brooklyn.camp.dto.PlatformDto;
 import io.brooklyn.camp.rest.resource.AbstractCampRestResource;
 import io.brooklyn.camp.rest.resource.ApplicationComponentTemplateRestResource;
+import io.brooklyn.camp.rest.resource.AssemblyTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformRestResource;
 import io.brooklyn.camp.spi.AbstractResource;
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.AssemblyTemplate;
 import io.brooklyn.camp.spi.PlatformComponentTemplate;
 import io.brooklyn.camp.spi.PlatformRootSummary;
 
@@ -38,6 +41,7 @@ public class DtoFactory {
         uriFactory.registerIdentifiableRestResource(PlatformRootSummary.class, PlatformRestResource.class);
         uriFactory.registerIdentifiableRestResource(PlatformComponentTemplate.class, PlatformComponentTemplateRestResource.class);
         uriFactory.registerIdentifiableRestResource(ApplicationComponentTemplate.class, ApplicationComponentTemplateRestResource.class);
+        uriFactory.registerIdentifiableRestResource(AssemblyTemplate.class, AssemblyTemplateRestResource.class);
     }
 
     public CampPlatform getPlatform() {
@@ -64,6 +68,9 @@ public class DtoFactory {
         return ApplicationComponentTemplateDto.newInstance(this, applicationComponentTemplate);
     }
 
+    public AssemblyTemplateDto adapt(AssemblyTemplate assemblyTemplate) {
+        return AssemblyTemplateDto.newInstance(this, assemblyTemplate);
+    }
     public PlatformDto adapt(PlatformRootSummary root) {
         return PlatformDto.newInstance(this, root);
     }
