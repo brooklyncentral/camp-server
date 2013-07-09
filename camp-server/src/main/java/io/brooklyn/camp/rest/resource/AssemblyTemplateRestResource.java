@@ -1,13 +1,19 @@
 package io.brooklyn.camp.rest.resource;
 
 import io.brooklyn.camp.dto.AssemblyTemplateDto;
+import io.brooklyn.camp.spi.Assembly;
 import io.brooklyn.camp.spi.AssemblyTemplate;
+
+import java.net.URI;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,15 +49,18 @@ public class AssemblyTemplateRestResource extends AbstractCampRestResource {
 //            , responseClass = AssemblyTemplateDto.CLASS_NAME
             )
     @POST
-    public void post(
+    public Response post(
+            @Context UriInfo info,
             @ApiParam(value = "ID of item being retrieved", required = true)
             @PathParam("id") String id) {
         try {
             log.info("CAMP REST instantiating AT "+id);
             AssemblyTemplate at = lookup(camp().assemblyTemplates(), id);
-            at.getInstantiator().newInstance().instantiate(at, camp());
-            
-            // TODO 201, with assembly info
+            Assembly assembly = at.getInstantiator().newInstance().instantiate(at, camp());
+            // see http://stackoverflow.com/questions/13702481/javax-response-prepends-method-path-when-setting-location-header-path-on-status
+            // for why we have to return absolute path
+            URI assemblyUri = info.getBaseUriBuilder().path( dto().adapt(assembly).getUri() ).build();
+            return Response.created(assemblyUri).build();
         } catch (Exception e) {
             log.error("Unable to create AT "+id+": "+e);
             throw Exceptions.propagate(e);

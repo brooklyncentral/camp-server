@@ -4,20 +4,22 @@ import io.brooklyn.camp.dto.PlatformDto;
 import io.brooklyn.camp.spi.AssemblyTemplate;
 
 import java.io.InputStream;
-import java.util.Map;
+import java.net.URI;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.rest.apidoc.Apidoc;
-import brooklyn.util.collections.MutableMap;
 
 import com.wordnik.swagger.core.ApiOperation;
 
@@ -41,26 +43,31 @@ public class PlatformRestResource extends AbstractCampRestResource {
     
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public Map<String,String> postJson(String json) {
-        return postYaml(json);
+    public Response postJson(@Context UriInfo info, String json) {
+        return postYaml(info, json);
     }
 
     @POST
     @Consumes({"application/x-yaml"})
-    public Map<String,String> postYaml(String yaml) {
+    public Response postYaml(@Context UriInfo info, String yaml) {
         log.debug("YAML pdp:\n"+yaml);
-        
         AssemblyTemplate template = camp().pdp().registerPdpFromYaml(yaml);
-        return MutableMap.of("Location", dto().adapt(template).getUri());
+        return created(info, template);
     }
 
     @POST
     @Consumes({"application/x-tar", "application/x-tgz", "application/x-zip"})
-    public Map<String,String> postArchive(InputStream archiveInput) {
+    public Response postArchive(@Context UriInfo info, InputStream archiveInput) {
         log.debug("ARCHIVE pdp");
-        
         AssemblyTemplate template = camp().pdp().registerPdpFromArchive(archiveInput);
-        return MutableMap.of("Location", dto().adapt(template).getUri());
+        return created(info, template);
+    }
+
+    protected Response created(UriInfo info, AssemblyTemplate template) {
+        // see http://stackoverflow.com/questions/13702481/javax-response-prepends-method-path-when-setting-location-header-path-on-status
+        // for why we have to return absolute path
+        URI assemblyTemplateUri = info.getBaseUriBuilder().path( dto().adapt(template).getUri() ).build();
+        return Response.created(assemblyTemplateUri).build();
     }
 
 }
