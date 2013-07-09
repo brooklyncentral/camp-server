@@ -1,5 +1,6 @@
 package io.brooklyn.camp;
 
+import io.brooklyn.camp.rest.resource.PlatformRestResource;
 import io.brooklyn.camp.rest.util.DtoFactory;
 import io.brooklyn.util.dups.NetworkUtils;
 
@@ -77,7 +78,8 @@ public class CampServer {
         webAppContext.setWar(
                 // TODO if there is a GUI or other war...
                 //findJsguiWebapp()!=null ? findJsguiWebapp() : 
-                CampServerUtils.createTempWebDirWithIndexHtml("CAMP REST API <p> (gui not available)"));
+                CampServerUtils.createTempWebDirWithIndexHtml("CAMP REST API <p> (no gui available - " +
+                		"rest endpoint at <a href=\""+PlatformRestResource.CAMP_URI_PATH+"\">"+PlatformRestResource.CAMP_URI_PATH+"</a>)"));
         CampServerUtils.installAsServletFilter(webAppContext);
         
         server = CampServerUtils.startServer(webAppContext, "CAMP server");
@@ -115,7 +117,7 @@ public class CampServer {
 
             // configure to match empty path, or any thing which looks like a file path with /assets/ and extension html, css, js, or png
             // and treat that as static content
-            config.getProperties().put(ServletContainer.PROPERTY_WEB_PAGE_CONTENT_REGEX, "(/?|[^?]*/asserts/[^?]+\\.[A-Za-z0-9_]+)");
+            config.getProperties().put(ServletContainer.PROPERTY_WEB_PAGE_CONTENT_REGEX, "(/?|[^?]*/assets/[^?]+\\.[A-Za-z0-9_]+)");
 
             // and anything which is not matched as a servlet also falls through (but more expensive than a regex check?)
             config.getFeatures().put(ServletContainer.FEATURE_FILTER_FORWARD_ON_404, true);

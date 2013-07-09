@@ -1,7 +1,9 @@
 package io.brooklyn.camp.rest.resource;
 
 import io.brooklyn.camp.dto.PlatformDto;
+import io.brooklyn.camp.spi.AssemblyTemplate;
 
+import java.io.InputStream;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
@@ -40,15 +42,25 @@ public class PlatformRestResource extends AbstractCampRestResource {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public Map<String,String> postJson(String json) {
-        log.info("JSON pdp:\n"+json);
-        return MutableMap.of("Location", "http://todo/json");
+        return postYaml(json);
     }
 
     @POST
-    @Consumes({"application/yaml"})
+    @Consumes({"application/x-yaml"})
     public Map<String,String> postYaml(String yaml) {
-        log.info("YAML pdp:\n"+yaml);
-        return MutableMap.of("Location", "http://todo/yaml");
+        log.debug("YAML pdp:\n"+yaml);
+        
+        AssemblyTemplate template = camp().pdp().registerPdpFromYaml(yaml);
+        return MutableMap.of("Location", dto().adapt(template).getUri());
+    }
+
+    @POST
+    @Consumes({"application/x-tar", "application/x-tgz", "application/x-zip"})
+    public Map<String,String> postArchive(InputStream archiveInput) {
+        log.debug("ARCHIVE pdp");
+        
+        AssemblyTemplate template = camp().pdp().registerPdpFromArchive(archiveInput);
+        return MutableMap.of("Location", dto().adapt(template).getUri());
     }
 
 }

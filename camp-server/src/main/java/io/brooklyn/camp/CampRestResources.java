@@ -3,6 +3,7 @@ package io.brooklyn.camp;
 import io.brooklyn.camp.rest.resource.AbstractCampRestResource;
 import io.brooklyn.camp.rest.resource.ApidocRestResource;
 import io.brooklyn.camp.rest.resource.ApplicationComponentTemplateRestResource;
+import io.brooklyn.camp.rest.resource.AssemblyTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformRestResource;
 
@@ -21,6 +22,7 @@ public class CampRestResources {
         resources.add(new PlatformRestResource());
         resources.add(new PlatformComponentTemplateRestResource());
         resources.add(new ApplicationComponentTemplateRestResource());
+        resources.add(new AssemblyTemplateRestResource());
         return resources;
     }
 

@@ -1,6 +1,8 @@
 package io.brooklyn.camp.spi;
 
+import io.brooklyn.camp.spi.collection.BasicResourceLookup;
 import io.brooklyn.camp.spi.collection.ResourceLookup;
+import io.brooklyn.camp.spi.collection.ResourceLookup.EmptyResourceLookup;
 
 
 /** Holds the metadata (name, description, etc) for an AssemblyTemplate
@@ -24,10 +26,10 @@ public class AssemblyTemplate extends AbstractResource {
     protected AssemblyTemplate() {}
 
     public ResourceLookup<ApplicationComponentTemplate> getApplicationComponentTemplates() {
-        return applicationComponentTemplates;
+        return applicationComponentTemplates != null ? applicationComponentTemplates : new EmptyResourceLookup<ApplicationComponentTemplate>();
     }
     public ResourceLookup<PlatformComponentTemplate> getPlatformComponentTemplates() {
-        return platformComponentTemplates;
+        return platformComponentTemplates != null ? platformComponentTemplates : new EmptyResourceLookup<PlatformComponentTemplate>();
     }
     
     private void setApplicationComponentTemplates(ResourceLookup<ApplicationComponentTemplate> applicationComponentTemplates) {
@@ -52,6 +54,17 @@ public class AssemblyTemplate extends AbstractResource {
         
         public Builder<T> applicationComponentTemplates(ResourceLookup<ApplicationComponentTemplate> x) { instance().setApplicationComponentTemplates(x); return thisBuilder(); }
         public Builder<T> platformComponentTemplates(ResourceLookup<PlatformComponentTemplate> x) { instance().setPlatformComponentTemplates(x); return thisBuilder(); }
+        
+        public synchronized Builder<T> add(ApplicationComponentTemplate x) {
+            if (instance().applicationComponentTemplates==null) {
+                instance().applicationComponentTemplates = new BasicResourceLookup<ApplicationComponentTemplate>();
+            }
+            if (!(instance().applicationComponentTemplates instanceof BasicResourceLookup)) {
+                throw new IllegalStateException("Cannot add to resource lookup "+instance().applicationComponentTemplates);
+            }
+            ((BasicResourceLookup<ApplicationComponentTemplate>)instance().applicationComponentTemplates).add(x);
+            return thisBuilder();
+        }
     }
 
 }

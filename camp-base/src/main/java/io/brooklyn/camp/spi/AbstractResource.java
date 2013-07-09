@@ -5,11 +5,14 @@ import io.brooklyn.camp.commontypes.RepresentationSkew;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import brooklyn.util.collections.MutableMap;
 import brooklyn.util.text.Identifiers;
 import brooklyn.util.time.Time;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 /** Superclass of CAMP resource implementation objects.
  * Typically used to hold common state of implementation objects
@@ -37,6 +40,8 @@ public class AbstractResource {
     private List<String> tags = Collections.emptyList();
     private RepresentationSkew representationSkew;
     
+    private Map<String,Object> customAttributes = new MutableMap<String, Object>();
+    
     /** Use {@link #builder()} to create */
     protected AbstractResource() {}
     
@@ -63,6 +68,9 @@ public class AbstractResource {
     public RepresentationSkew getRepresentationSkew() {
         return representationSkew;
     }
+    public Map<String, Object> getCustomAttributes() {
+        return ImmutableMap.copyOf(customAttributes);
+    }
     
     // setters
 
@@ -87,6 +95,9 @@ public class AbstractResource {
     }
     private void setRepresentationSkew(RepresentationSkew representationSkew) {
         this.representationSkew = representationSkew;
+    }
+    public void setCustomAttribute(String key, Object value) {
+        this.customAttributes.put(key, value);
     }
             
     // builder
@@ -145,6 +156,7 @@ public class AbstractResource {
         public U created(Date x) { instance().setCreated(x); return thisBuilder(); }
         public U tags(List<String> x) { instance().setTags(x); return thisBuilder(); }
         public U representationSkew(RepresentationSkew x) { instance().setRepresentationSkew(x); return thisBuilder(); }
+        public U customAttribute(String key, Object value) { instance().setCustomAttribute(key, value); return thisBuilder(); }
     }
 
     // only for testing

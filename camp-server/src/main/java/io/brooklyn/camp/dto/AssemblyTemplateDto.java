@@ -20,12 +20,12 @@ public class AssemblyTemplateDto extends ResourceDto {
         super(dtoFactory, x);
         
         platformComponentTemplates = new ArrayList<LinkDto>();
-        for (Link<PlatformComponentTemplate> t: dtoFactory.getPlatform().platformComponentTemplates().links()) {
+        for (Link<PlatformComponentTemplate> t: x.getPlatformComponentTemplates().links()) {
             platformComponentTemplates.add(LinkDto.newInstance(dtoFactory, PlatformComponentTemplate.class, t));
         }
         
         applicationComponentTemplates = new ArrayList<LinkDto>();
-        for (Link<ApplicationComponentTemplate> t: dtoFactory.getPlatform().applicationComponentTemplates().links()) {
+        for (Link<ApplicationComponentTemplate> t: x.getApplicationComponentTemplates().links()) {
             applicationComponentTemplates.add(LinkDto.newInstance(dtoFactory, ApplicationComponentTemplate.class, t));
         }
     }
@@ -33,10 +33,18 @@ public class AssemblyTemplateDto extends ResourceDto {
     private List<LinkDto> platformComponentTemplates;
     private List<LinkDto> applicationComponentTemplates;
 
-    // TODO
+    // TODO addl AssemblyTemplate fields
 //  "parameterDefinitionUri": URI,
 //  "pdpUri" : URI ?
 
+    public List<LinkDto> getPlatformComponentTemplates() {
+        return platformComponentTemplates;
+    }
+    
+    public List<LinkDto> getApplicationComponentTemplates() {
+        return applicationComponentTemplates;
+    }
+    
     // --- building ---
 
     public static AssemblyTemplateDto newInstance(DtoFactory dtoFactory, AssemblyTemplate x) {

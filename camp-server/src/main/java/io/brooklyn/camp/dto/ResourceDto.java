@@ -28,6 +28,9 @@ public class ResourceDto extends DtoCustomAttributes {
         tags = x.getTags();
         representationSkew = x.getRepresentationSkew();
         
+        if (x.getCustomAttributes()!=null && !x.getCustomAttributes().isEmpty())
+            newInstanceCustomAttributes(x.getCustomAttributes());
+        
         uri = dtoFactory.uri(x);
     }
     
