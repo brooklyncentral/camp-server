@@ -1,7 +1,10 @@
 package io.brooklyn.camp;
 
+import io.brooklyn.camp.spi.ApplicationComponent;
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
+import io.brooklyn.camp.spi.Assembly;
 import io.brooklyn.camp.spi.AssemblyTemplate;
+import io.brooklyn.camp.spi.PlatformComponent;
 import io.brooklyn.camp.spi.PlatformComponentTemplate;
 import io.brooklyn.camp.spi.PlatformRootSummary;
 import io.brooklyn.camp.spi.PlatformTransaction;
@@ -38,7 +41,11 @@ public abstract class CampPlatform {
     public abstract ResourceLookup<PlatformComponentTemplate> platformComponentTemplates();
     public abstract ResourceLookup<ApplicationComponentTemplate> applicationComponentTemplates();
     public abstract ResourceLookup<AssemblyTemplate> assemblyTemplates();
-    
+
+    public abstract ResourceLookup<PlatformComponent> platformComponents();
+    public abstract ResourceLookup<ApplicationComponent> applicationComponents();
+    public abstract ResourceLookup<Assembly> assemblies();
+
     /** returns object where changes to a PDP can be made; note all changes must be committed */
     public abstract PlatformTransaction transaction();
 
