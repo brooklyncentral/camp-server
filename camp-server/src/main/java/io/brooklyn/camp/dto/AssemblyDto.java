@@ -9,6 +9,9 @@ import io.brooklyn.camp.spi.PlatformComponent;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 public class AssemblyDto extends ResourceDto {
 
     // defined as a constant so can be used in Swagger REST API annotations
@@ -37,10 +40,12 @@ public class AssemblyDto extends ResourceDto {
 //  "parameterDefinitionUri": URI,
 //  "pdpUri" : URI ?
 
+    @JsonInclude(Include.NON_EMPTY)
     public List<LinkDto> getPlatformComponents() {
         return platformComponents;
     }
     
+    @JsonInclude(Include.NON_EMPTY)
     public List<LinkDto> getApplicationComponents() {
         return applicationComponents;
     }

@@ -15,6 +15,9 @@ public class Assembly extends AbstractResource {
     public static final String CAMP_TYPE = "Assembly";
     static { assert CAMP_TYPE.equals(Assembly.class.getSimpleName()); }
     
+    /** Use {@link #builder()} to create */
+    protected Assembly() {}
+
     AssemblyTemplate assemblyTemplate;
     ResourceLookup<ApplicationComponent> applicationComponents;
     ResourceLookup<PlatformComponent> platformComponents;
@@ -23,9 +26,6 @@ public class Assembly extends AbstractResource {
 //    "parameterDefinitionUri": URI,
 //    "pdpUri" : URI ?
                     
-    /** Use {@link #builder()} to create */
-    protected Assembly() {}
-
     public AssemblyTemplate getAssemblyTemplate() {
         return assemblyTemplate;
     }
