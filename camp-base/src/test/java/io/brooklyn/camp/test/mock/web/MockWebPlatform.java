@@ -28,6 +28,7 @@ public class MockWebPlatform {
                 .name("WebAppAssembly1")
                 .description("Mock Web App Assembly Template")
                 .applicationComponentTemplates(BasicResourceLookup.of(WAR))
+                .instantiator(MockAssemblyTemplateInstantiator.class)
                 .build();
 
     public static final PdpMatcher WAR_GETS_WAR_MATCHER = new PdpMatcher.ArtifactMatcher("com.java:WAR") {

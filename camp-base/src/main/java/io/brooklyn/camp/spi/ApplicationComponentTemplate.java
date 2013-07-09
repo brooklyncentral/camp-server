@@ -17,6 +17,8 @@ public class ApplicationComponentTemplate extends AbstractResource {
     
     // no fields beyond basic resource
     
+    // TODO platform component templates, maybe other act's too ?
+    
     
     // builder
     
