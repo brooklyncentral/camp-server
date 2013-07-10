@@ -25,7 +25,7 @@ import com.wordnik.swagger.core.ApiOperation;
 import com.wordnik.swagger.core.ApiParam;
 
 @Path(AssemblyTemplateRestResource.URI_PATH)
-@Apidoc("Platform Component Template resources")
+@Apidoc("Assembly Template resources")
 @Produces("application/json")
 public class AssemblyTemplateRestResource extends AbstractCampRestResource {
 

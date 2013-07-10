@@ -13,7 +13,7 @@ import com.wordnik.swagger.core.ApiOperation;
 import com.wordnik.swagger.core.ApiParam;
 
 @Path(PlatformComponentRestResource.URI_PATH)
-@Apidoc("Platform Component Template resources")
+@Apidoc("Platform Component resources")
 @Produces("application/json")
 public class PlatformComponentRestResource extends AbstractCampRestResource {
 
