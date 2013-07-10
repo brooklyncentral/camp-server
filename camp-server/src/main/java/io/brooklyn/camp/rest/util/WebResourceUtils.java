@@ -1,5 +1,7 @@
 package io.brooklyn.camp.rest.util;
 
+import io.brooklyn.camp.dto.ApiErrorDto;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,7 +18,7 @@ public class WebResourceUtils {
         if (log.isDebugEnabled()) log.debug("returning 404 notFound("+msg+")");
         throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                 .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(ApiError.builder().message(msg)).build());
+                .entity(ApiErrorDto.builder().message(msg).build()).build());
     }
 
     public static WebApplicationException preconditionFailed(String format, Object... args) {
@@ -24,7 +26,7 @@ public class WebResourceUtils {
         if (log.isDebugEnabled()) log.debug("returning 412 preconditionFailed("+msg+")");
         throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
                 .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(ApiError.builder().message(msg)).build());
+                .entity(ApiErrorDto.builder().message(msg).build()).build());
     }
 
 }

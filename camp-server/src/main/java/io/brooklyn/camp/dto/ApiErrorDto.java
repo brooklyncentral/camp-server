@@ -1,4 +1,4 @@
-package io.brooklyn.camp.rest.util;
+package io.brooklyn.camp.dto;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -8,14 +8,20 @@ import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 
-public class ApiError {
+/**
+ * A simple error message that provides a message and optional details.
+ *
+ * This class should eventually be replaced with an ErrorMessage object,
+ * as described in the CAMP spec.
+ */
+public class ApiErrorDto {
 
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * @return An {@link ApiError.Builder} whose message is initialised to either the throwable's
+     * @return An {@link ApiErrorDto.Builder} whose message is initialised to either the throwable's
      *         message or the throwable's class name if the message is null and whose details are
      *         initialised to the throwable's stack trace.
      */
@@ -42,11 +48,11 @@ public class ApiError {
             return this;
         }
 
-        public ApiError build() {
-            return new ApiError(message, details);
+        public ApiErrorDto build() {
+            return new ApiErrorDto(message, details);
         }
 
-        public Builder fromApiError(ApiError error) {
+        public Builder fromApiErrorDto(ApiErrorDto error) {
             return this
                     .message(error.message)
                     .details(error.details);
@@ -56,7 +62,7 @@ public class ApiError {
     private final String message;
     private final String details;
 
-    public ApiError(
+    public ApiErrorDto(
             @JsonProperty("message") String message,
             @JsonProperty("details") String details) {
         this.message = checkNotNull(message, "message");
@@ -75,7 +81,7 @@ public class ApiError {
     public boolean equals(Object other) {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
-        ApiError that = ApiError.class.cast(other);
+        ApiErrorDto that = ApiErrorDto.class.cast(other);
         return Objects.equal(this.message, that.message) &&
                 Objects.equal(this.details, that.details);
     }
