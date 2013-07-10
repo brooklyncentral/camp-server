@@ -18,27 +18,26 @@ import com.fasterxml.jackson.databind.util.ISO8601Utils;
 
 public class ResourceDto extends DtoCustomAttributes {
 
-    protected ResourceDto() {}
-    protected ResourceDto(DtoFactory dtoFactory, AbstractResource x) {
-        type = x.getType();
-        name = x.getName();
-
-        description = x.getDescription();
-        setCreated(x.getCreated());
-        tags = x.getTags();
-        representationSkew = x.getRepresentationSkew();
-        
-        uri = dtoFactory.uri(x);
-    }
-    
     private String uri;
     private String type;
-    
     private String name;
     private String description;
     private Date created;
     private List<String> tags;
     private RepresentationSkew representationSkew;
+
+    protected ResourceDto() {}
+    protected ResourceDto(DtoFactory dtoFactory, AbstractResource resource) {
+        type = resource.getType();
+        name = resource.getName();
+
+        description = resource.getDescription();
+        setCreated(resource.getCreated());
+        tags = resource.getTags();
+        representationSkew = resource.getRepresentationSkew();
+
+        uri = dtoFactory.uri(resource);
+    }
 
     public String getUri() {
         return uri;
@@ -84,8 +83,8 @@ public class ResourceDto extends DtoCustomAttributes {
 
     // --- building ---
 
-    public static ResourceDto newInstance(DtoFactory dtoFactory, AbstractResource x) {
-        return new ResourceDto(dtoFactory, x);
+    public static ResourceDto newInstance(DtoFactory dtoFactory, AbstractResource resource) {
+        return new ResourceDto(dtoFactory, resource);
     }
     
 }

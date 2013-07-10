@@ -17,10 +17,9 @@
     </parent>
 
     <properties>
-        <jersey.version>1.12</jersey.version>
-        <jersey.json.version>1.12</jersey.json.version>
-        <jersey.multipart.version>1.12</jersey.multipart.version>
+        <jersey.version>1.17</jersey.version>
         <jetty.version>8.1.4.v20120524</jetty.version>
+        <guice.version>3.0</guice.version>
     </properties>
 
     <dependencies>
@@ -31,25 +30,26 @@
         </dependency>
 
         <dependency>
-            <groupId>io.brooklyn.camp</groupId>
-            <artifactId>camp-base</artifactId>
-            <version>${camp-impl.version}</version>
-            <classifier>tests</classifier>
-            <scope>test</scope>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>${guice.version}</version>
         </dependency>
-        
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-servlet</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-        
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-json-provider</artifactId>
@@ -67,9 +67,14 @@
             <version>${jersey.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-guice</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
-            <version>${jersey.json.version}</version>
+            <version>${jersey.version}</version>
               <exclusions>
                 <exclusion>
                     <groupId>com.sun.xml.bind</groupId>
@@ -81,7 +86,7 @@
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-multipart</artifactId>
-            <version>${jersey.multipart.version}</version>
+            <version>${jersey.version}</version>
         </dependency>
 
         <dependency>
@@ -101,7 +106,22 @@
             <artifactId>brooklyn-utils-rest-swagger</artifactId>
             <version>${brooklyn.version}</version>
         </dependency>
-        
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>com.sun.jersey.jersey-test-framework</groupId>
+            <artifactId>jersey-test-framework-grizzly2</artifactId>
+            <version>${jersey.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.brooklyn.camp</groupId>
+            <artifactId>camp-base</artifactId>
+            <version>${camp-impl.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

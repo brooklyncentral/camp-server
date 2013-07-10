@@ -4,10 +4,10 @@ import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.dto.ApplicationComponentTemplateDto;
 import io.brooklyn.camp.dto.PlatformComponentTemplateDto;
 import io.brooklyn.camp.dto.PlatformDto;
-import io.brooklyn.camp.rest.resource.AbstractCampRestResource;
-import io.brooklyn.camp.rest.resource.ApplicationComponentTemplateRestResource;
-import io.brooklyn.camp.rest.resource.PlatformComponentTemplateRestResource;
-import io.brooklyn.camp.rest.resource.PlatformRestResource;
+import io.brooklyn.camp.rest.resource.AbstractCampResource;
+import io.brooklyn.camp.rest.resource.ApplicationComponentTemplateResource;
+import io.brooklyn.camp.rest.resource.PlatformComponentTemplateResource;
+import io.brooklyn.camp.rest.resource.PlatformResource;
 import io.brooklyn.camp.spi.AbstractResource;
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
 import io.brooklyn.camp.spi.PlatformComponentTemplate;
@@ -15,6 +15,9 @@ import io.brooklyn.camp.spi.PlatformRootSummary;
 
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.ws.rs.Path;
 
 import brooklyn.util.collections.MutableMap;
@@ -23,6 +26,7 @@ import brooklyn.util.net.Urls;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 
+@Singleton
 public class DtoFactory {
 
     private CampPlatform platform;
@@ -30,14 +34,15 @@ public class DtoFactory {
     
     private UriFactory uriFactory;
 
-    public DtoFactory(CampPlatform campPlatform, String uriBase) {
+    @Inject
+    public DtoFactory(CampPlatform campPlatform, @Named("uriBase") String uriBase) {
         this.platform = campPlatform;
         this.uriBase = uriBase;
         
         uriFactory = new UriFactory();
-        uriFactory.registerIdentifiableRestResource(PlatformRootSummary.class, PlatformRestResource.class);
-        uriFactory.registerIdentifiableRestResource(PlatformComponentTemplate.class, PlatformComponentTemplateRestResource.class);
-        uriFactory.registerIdentifiableRestResource(ApplicationComponentTemplate.class, ApplicationComponentTemplateRestResource.class);
+        uriFactory.registerIdentifiableRestResource(PlatformRootSummary.class, PlatformResource.class);
+        uriFactory.registerIdentifiableRestResource(PlatformComponentTemplate.class, PlatformComponentTemplateResource.class);
+        uriFactory.registerIdentifiableRestResource(ApplicationComponentTemplate.class, ApplicationComponentTemplateResource.class);
     }
 
     public CampPlatform getPlatform() {
@@ -48,8 +53,8 @@ public class DtoFactory {
         return uriFactory;
     }
 
-    public String uri(AbstractResource x) {
-        return getUriFactory().uri(x);
+    public String uri(AbstractResource resource) {
+        return getUriFactory().uri(resource);
     }
         
     public String uri(Class<? extends AbstractResource> targetType, String id) {
@@ -71,6 +76,7 @@ public class DtoFactory {
     public class UriFactory {
         /** registry of generating a URI given an object */
         Map<Class<?>,Function<Object,String>> registryResource = new MutableMap<Class<?>, Function<Object,String>>();
+
         /** registry of generating a URI given an ID */
         Map<Class<?>,Function<String,String>> registryId = new MutableMap<Class<?>, Function<String,String>>();
 
@@ -88,7 +94,7 @@ public class DtoFactory {
                     return Urls.mergePaths(resourceTypeUriBase, id);
                 }
             };
-            registryId.put(type, (Function<String, String>) fnUriFromId);
+            registryId.put(type, fnUriFromId);
             registerResourceUriFunction(type, new Function<T,String>() {
                 public String apply(T input) {
                     return fnUriFromId.apply(fnIdentity.apply(input));
@@ -99,8 +105,8 @@ public class DtoFactory {
         /** registers a CAMP Resource type against a RestResource, generating the URI
          * by concatenating the @Path annotation on the RestResource with the ID of the CAMP resource */
         @SuppressWarnings({ "unchecked", "rawtypes" })
-        public synchronized <T extends AbstractResource> void registerIdentifiableRestResource(Class<T> type, Class<? extends AbstractCampRestResource> restResource) {
-            registerIdentityFunction(type, 
+        public synchronized <T extends AbstractResource> void registerIdentifiableRestResource(Class<T> type, Class<? extends AbstractCampResource> restResource) {
+            registerIdentityFunction(type,
                     uriOfRestResource(restResource),
                     (Function) CampRestGuavas.IDENTITY_OF_REST_RESOURCE);
         }
@@ -111,14 +117,14 @@ public class DtoFactory {
                     .apply(id);
         }
 
-        public String uri(AbstractResource x) {
-            return Preconditions.checkNotNull(registryResource.get(x.getClass()), 
-                    "No REST converter registered for %s (%s)", x.getClass(), x)
-                    .apply(x);
+        public String uri(AbstractResource resource) {
+            return Preconditions.checkNotNull(registryResource.get(resource.getClass()),
+                    "No REST converter registered for %s (%s)", resource.getClass(), resource)
+                    .apply(resource);
         }
         
         public String uriOfRestResource(Class<?> restResourceClass) {
-            return Urls.mergePaths(uriBase, 
+            return Urls.mergePaths(uriBase,
                     Preconditions.checkNotNull(restResourceClass.getAnnotation(Path.class),
                             "No @Path on type %s", restResourceClass)
                     .value());

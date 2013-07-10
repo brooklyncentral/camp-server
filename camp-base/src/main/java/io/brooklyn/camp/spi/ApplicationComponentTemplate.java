@@ -10,7 +10,7 @@ public class ApplicationComponentTemplate extends AbstractResource {
 
     public static final String CAMP_TYPE = "ApplicationComponentTemplate";
     static { assert CAMP_TYPE.equals(ApplicationComponentTemplate.class.getSimpleName()); }
-    
+
     /** Use {@link #builder()} to create */
     protected ApplicationComponentTemplate() {}
 

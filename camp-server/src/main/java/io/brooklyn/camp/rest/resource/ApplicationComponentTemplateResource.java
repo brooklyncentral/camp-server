@@ -12,12 +12,10 @@ import brooklyn.rest.apidoc.Apidoc;
 import com.wordnik.swagger.core.ApiOperation;
 import com.wordnik.swagger.core.ApiParam;
 
-@Path(ApplicationComponentTemplateRestResource.URI_PATH)
+@Path("/v11/application-component-templates")
 @Apidoc("Application Component Template resources")
 @Produces("application/json")
-public class ApplicationComponentTemplateRestResource extends AbstractCampRestResource {
-
-    public static final String URI_PATH = PlatformRestResource.CAMP_URI_PATH + "/application-component-templates";
+public class ApplicationComponentTemplateResource extends AbstractCampResource {
 
     @Path("/{id}")
     @ApiOperation(value = "Get a specific platform component template",
@@ -26,7 +24,7 @@ public class ApplicationComponentTemplateRestResource extends AbstractCampRestRe
     public ApplicationComponentTemplateDto get(
             @ApiParam(value = "ID of item being retrieved", required = true)
             @PathParam("id") String id) {
-        return dto().adapt(lookup(camp().applicationComponentTemplates(), id));
+        return dtoFactory.adapt(lookup(campPlatform.applicationComponentTemplates(), id));
     }
 
 }

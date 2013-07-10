@@ -27,28 +27,28 @@ public class LinkDto extends DtoCustomAttributes {
     
     // --- building ---
 
-    public static LinkDto newInstance(DtoFactory dtoFactory, Class<? extends AbstractResource> targetType, Link<?> x) {
-        return new LinkDto().newInstanceInitialization(dtoFactory, targetType, x);
+    public static LinkDto newInstance(DtoFactory dtoFactory, Class<? extends AbstractResource> targetType, Link<?> link) {
+        return new LinkDto().newInstanceInitialization(dtoFactory, targetType, link);
     }
     
-    protected LinkDto newInstanceInitialization(DtoFactory dtoFactory, Class<? extends AbstractResource> targetType, Link<?> x) {
-        targetName = x.getName();
+    protected LinkDto newInstanceInitialization(DtoFactory dtoFactory, Class<? extends AbstractResource> targetType, Link<?> link) {
+        targetName = link.getName();
         
-        href = dtoFactory.uri(targetType, x.getId());
+        href = dtoFactory.uri(targetType, link.getId());
         return this;
     }
 
     public static LinkDto newInstance(String href, String targetName) {
-        LinkDto x = new LinkDto();
-        x.href = href;
-        x.targetName = targetName;
-        return x;
+        LinkDto link = new LinkDto();
+        link.href = href;
+        link.targetName = targetName;
+        return link;
     }
     
-    public static LinkDto newInstance(String href, String targetName, Map<String,? extends Object> customAttributes) {
-        LinkDto x = newInstance(href, targetName);
-        x.newInstanceCustomAttributes(customAttributes);
-        return x;
+    public static LinkDto newInstance(String href, String targetName, Map<String, ?> customAttributes) {
+        LinkDto link = newInstance(href, targetName);
+        link.newInstanceCustomAttributes(customAttributes);
+        return link;
     }
     
 }
