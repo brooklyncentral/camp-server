@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import brooklyn.rest.domain.ApiError;
+import io.brooklyn.camp.dto.ApiErrorDto;
 
 public class WebResourceUtils {
 
@@ -18,7 +18,7 @@ public class WebResourceUtils {
         if (log.isDebugEnabled()) log.debug("returning 404 notFound("+msg+")");
         throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                 .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(new ApiError(msg)).build());
+                .entity(ApiErrorDto.builder().message(msg).build()).build());
     }
 
     public static WebApplicationException preconditionFailed(String format, Object... args) {
@@ -26,7 +26,7 @@ public class WebResourceUtils {
         if (log.isDebugEnabled()) log.debug("returning 412 preconditionFailed("+msg+")");
         throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
                 .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(new ApiError(msg)).build());
+                .entity(ApiErrorDto.builder().message(msg).build()).build());
     }
 
 }
