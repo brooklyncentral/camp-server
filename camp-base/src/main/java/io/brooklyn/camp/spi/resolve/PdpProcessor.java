@@ -1,7 +1,11 @@
-package io.brooklyn.camp.spi.pdp;
+package io.brooklyn.camp.spi.resolve;
 
 import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.spi.AssemblyTemplate;
+import io.brooklyn.camp.spi.instantiate.BasicAssemblyTemplateInstantiator;
+import io.brooklyn.camp.spi.pdp.Artifact;
+import io.brooklyn.camp.spi.pdp.AssemblyTemplateConstructor;
+import io.brooklyn.camp.spi.pdp.DeploymentPlan;
 import io.brooklyn.util.yaml.Yamls;
 
 import java.io.InputStream;
@@ -36,12 +40,15 @@ public class PdpProcessor {
         
         AssemblyTemplateConstructor atc = new AssemblyTemplateConstructor(campPlatform);
         
-        if (plan.name!=null) atc.name(plan.name);
-        if (plan.description!=null) atc.description(plan.description);
+        // default instantiator is one which just invokes the component's instantiator
+        atc.instantiator(BasicAssemblyTemplateInstantiator.class);
+        
+        if (plan.getName()!=null) atc.name(plan.getName());
+        if (plan.getDescription()!=null) atc.description(plan.getDescription());
         // nothing done with origin just now...
         
-        if (plan.artifacts!=null) {
-            for (Artifact art: plan.artifacts) {
+        if (plan.getArtifacts()!=null) {
+            for (Artifact art: plan.getArtifacts()) {
                 apply(art, atc);
             }
         }

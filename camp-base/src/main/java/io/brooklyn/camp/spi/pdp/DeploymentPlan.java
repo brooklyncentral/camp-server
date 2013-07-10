@@ -21,7 +21,7 @@ public class DeploymentPlan {
     Map<String,Object> customAttributes;
 
     @SuppressWarnings("unchecked")
-    static DeploymentPlan of(Map<String,Object> root) {
+    public static DeploymentPlan of(Map<String,Object> root) {
         Map<String,Object> attrs = MutableMap.copyOf(root);
         
         DeploymentPlan result = new DeploymentPlan();

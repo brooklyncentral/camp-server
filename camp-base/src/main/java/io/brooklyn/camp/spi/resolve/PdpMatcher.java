@@ -1,4 +1,7 @@
-package io.brooklyn.camp.spi.pdp;
+package io.brooklyn.camp.spi.resolve;
+
+import io.brooklyn.camp.spi.pdp.Artifact;
+import io.brooklyn.camp.spi.pdp.AssemblyTemplateConstructor;
 
 
 public interface PdpMatcher {
@@ -12,7 +15,7 @@ public interface PdpMatcher {
             this.artifactType = artifactType;
         }
         public boolean accepts(Object art) {
-            return (art instanceof Artifact) && this.artifactType.equals( ((Artifact)art).artifactType );
+            return (art instanceof Artifact) && this.artifactType.equals( ((Artifact)art).getArtifactType() );
         }
     }
 }

@@ -3,7 +3,7 @@ package io.brooklyn.camp.test.mock.web;
 import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.spi.Assembly;
 import io.brooklyn.camp.spi.AssemblyTemplate;
-import io.brooklyn.camp.spi.AssemblyTemplateInstantiator;
+import io.brooklyn.camp.spi.instantiate.AssemblyTemplateInstantiator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

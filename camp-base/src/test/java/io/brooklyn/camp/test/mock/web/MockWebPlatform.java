@@ -7,7 +7,7 @@ import io.brooklyn.camp.spi.PlatformComponentTemplate;
 import io.brooklyn.camp.spi.collection.BasicResourceLookup;
 import io.brooklyn.camp.spi.pdp.Artifact;
 import io.brooklyn.camp.spi.pdp.AssemblyTemplateConstructor;
-import io.brooklyn.camp.spi.pdp.PdpMatcher;
+import io.brooklyn.camp.spi.resolve.PdpMatcher;
 
 public class MockWebPlatform {
 

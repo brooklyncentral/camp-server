@@ -9,7 +9,7 @@ import io.brooklyn.camp.spi.PlatformComponentTemplate;
 import io.brooklyn.camp.spi.PlatformRootSummary;
 import io.brooklyn.camp.spi.PlatformTransaction;
 import io.brooklyn.camp.spi.collection.ResourceLookup;
-import io.brooklyn.camp.spi.pdp.PdpProcessor;
+import io.brooklyn.camp.spi.resolve.PdpProcessor;
 
 import com.google.common.base.Preconditions;
 

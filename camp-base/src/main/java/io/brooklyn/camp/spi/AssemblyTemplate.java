@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import io.brooklyn.camp.spi.collection.BasicResourceLookup;
 import io.brooklyn.camp.spi.collection.ResourceLookup;
 import io.brooklyn.camp.spi.collection.ResourceLookup.EmptyResourceLookup;
+import io.brooklyn.camp.spi.instantiate.AssemblyTemplateInstantiator;
 
 
 /** Holds the metadata (name, description, etc) for an AssemblyTemplate

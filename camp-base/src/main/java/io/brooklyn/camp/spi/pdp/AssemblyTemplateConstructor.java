@@ -4,6 +4,7 @@ import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
 import io.brooklyn.camp.spi.AssemblyTemplate;
 import io.brooklyn.camp.spi.AssemblyTemplate.Builder;
+import io.brooklyn.camp.spi.instantiate.AssemblyTemplateInstantiator;
 import io.brooklyn.camp.spi.PlatformTransaction;
 
 public class AssemblyTemplateConstructor {
@@ -32,6 +33,10 @@ public class AssemblyTemplateConstructor {
 
     public void description(String description) {
         builder.description(description);
+    }
+    
+    public void instantiator(Class<? extends AssemblyTemplateInstantiator> instantiator) {
+        builder.instantiator(instantiator);
     }
 
     public void add(ApplicationComponentTemplate act) {
