@@ -12,10 +12,10 @@ public class ApplicationComponentTemplateDto extends ResourceDto {
     protected ApplicationComponentTemplateDto() {}
     protected ApplicationComponentTemplateDto(DtoFactory dtoFactory, ApplicationComponentTemplate x) {
         super(dtoFactory, x);
-        // TODO set custom fields
+        // TODO set addl ACT fields
     }
  
-    // TODO add custom fields
+    // TODO add addl ACT fields
     
     // --- building ---
 

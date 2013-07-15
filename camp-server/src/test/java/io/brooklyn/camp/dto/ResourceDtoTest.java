@@ -24,6 +24,7 @@ public class ResourceDtoTest {
     AbstractResource rr;
     ResourceDto r;
     
+    @SuppressWarnings("unchecked")
     protected void initSimpleDto() {
         s = new CampServer(new BasicCampPlatform(), "http://atest/");
         s.getDtoFactory().getUriFactory().registerIdentityFunction(AbstractResource.class, "basic", CampRestGuavas.IDENTITY_OF_REST_RESOURCE);

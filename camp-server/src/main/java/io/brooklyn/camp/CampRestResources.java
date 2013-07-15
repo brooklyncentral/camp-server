@@ -2,7 +2,11 @@ package io.brooklyn.camp;
 
 import io.brooklyn.camp.rest.resource.AbstractCampRestResource;
 import io.brooklyn.camp.rest.resource.ApidocRestResource;
+import io.brooklyn.camp.rest.resource.ApplicationComponentRestResource;
 import io.brooklyn.camp.rest.resource.ApplicationComponentTemplateRestResource;
+import io.brooklyn.camp.rest.resource.AssemblyRestResource;
+import io.brooklyn.camp.rest.resource.AssemblyTemplateRestResource;
+import io.brooklyn.camp.rest.resource.PlatformComponentRestResource;
 import io.brooklyn.camp.rest.resource.PlatformComponentTemplateRestResource;
 import io.brooklyn.camp.rest.resource.PlatformRestResource;
 
@@ -19,8 +23,12 @@ public class CampRestResources {
     public static Iterable<AbstractCampRestResource> getCampRestResources() {
         List<AbstractCampRestResource> resources = new ArrayList<AbstractCampRestResource>();
         resources.add(new PlatformRestResource());
+        resources.add(new AssemblyTemplateRestResource());
         resources.add(new PlatformComponentTemplateRestResource());
         resources.add(new ApplicationComponentTemplateRestResource());
+        resources.add(new AssemblyRestResource());
+        resources.add(new PlatformComponentRestResource());
+        resources.add(new ApplicationComponentRestResource());
         return resources;
     }
 

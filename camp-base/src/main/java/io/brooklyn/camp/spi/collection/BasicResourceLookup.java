@@ -30,6 +30,10 @@ public class BasicResourceLookup<T extends AbstractResource> extends AbstractRes
         links.put(item.getId(), newLink(item.getId(), item.getName()));
     }
     
+    public synchronized void addAll(T... items) {
+        for (T item: items) add(item);
+    }
+    
     public synchronized T update(T item) {
         T old = items.put(item.getId(), item);
         links.put(item.getId(), newLink(item.getId(), item.getName()));
@@ -41,4 +45,9 @@ public class BasicResourceLookup<T extends AbstractResource> extends AbstractRes
         return links.remove(id)!=null;
     }
     
+    public static <T extends AbstractResource> BasicResourceLookup<T> of(T ...items) {
+        BasicResourceLookup<T> result = new BasicResourceLookup<T>();
+        for (T item: items) result.add(item);
+        return result;
+    }
 }
