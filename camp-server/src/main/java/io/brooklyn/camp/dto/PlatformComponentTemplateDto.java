@@ -12,10 +12,10 @@ public class PlatformComponentTemplateDto extends ResourceDto {
     protected PlatformComponentTemplateDto() {}
     protected PlatformComponentTemplateDto(DtoFactory dtoFactory, PlatformComponentTemplate x) {
         super(dtoFactory, x);
-        // TODO set custom fields
+        // TODO set addl PCT fields
     }
  
-    // TODO add custom fields
+    // TODO add addl PCT fields
     
     // --- building ---
 

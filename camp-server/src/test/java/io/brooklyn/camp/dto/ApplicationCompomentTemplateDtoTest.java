@@ -3,7 +3,6 @@ package io.brooklyn.camp.dto;
 import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.rest.util.DtoFactory;
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
-import io.brooklyn.camp.test.mock.web.MockWarComponent;
 import io.brooklyn.camp.test.mock.web.MockWebPlatform;
 import junit.framework.Assert;
 
@@ -20,7 +19,7 @@ public class ApplicationCompomentTemplateDtoTest {
         CampPlatform p = MockWebPlatform.newPlatform();
         DtoFactory f = new DtoFactory(p, "");
         
-        ApplicationComponentTemplate t = MockWarComponent.TEMPLATE;
+        ApplicationComponentTemplate t = MockWebPlatform.WAR;
         ApplicationComponentTemplateDto dto = f.adapt(t);
         
         log.info("War PCT serialized as: "+BasicDtoTest.tree(dto));

@@ -17,9 +17,7 @@
     </parent>
 
     <properties>
-        <jersey.version>1.12</jersey.version>
-        <jersey.json.version>1.12</jersey.json.version>
-        <jersey.multipart.version>1.12</jersey.multipart.version>
+        <jersey.version>1.17</jersey.version>
         <jetty.version>8.1.4.v20120524</jetty.version>
     </properties>
 
@@ -69,7 +67,7 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
-            <version>${jersey.json.version}</version>
+            <version>${jersey.version}</version>
               <exclusions>
                 <exclusion>
                     <groupId>com.sun.xml.bind</groupId>
@@ -81,7 +79,7 @@
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-multipart</artifactId>
-            <version>${jersey.multipart.version}</version>
+            <version>${jersey.version}</version>
         </dependency>
 
         <dependency>
@@ -101,6 +99,16 @@
             <artifactId>brooklyn-utils-rest-swagger</artifactId>
             <version>${brooklyn.version}</version>
         </dependency>
+        
+        <!-- TODO have a camp.log / logging module -->
+        <dependency>
+            <groupId>io.brooklyn</groupId>
+            <artifactId>brooklyn-logback-xml</artifactId>
+            <version>${brooklyn.version}</version>
+            <!-- optional so that this project has logging; dependencies may redeclare or supply their own -->
+            <optional>true</optional>
+        </dependency>
+        
         
     </dependencies>
 

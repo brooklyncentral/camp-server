@@ -20,7 +20,7 @@ public class ApplicationComponentTemplateRestResource extends AbstractCampRestRe
     public static final String URI_PATH = PlatformRestResource.CAMP_URI_PATH + "/application-component-templates";
 
     @Path("/{id}")
-    @ApiOperation(value = "Get a specific platform component template",
+    @ApiOperation(value = "Get a specific application component template",
         responseClass = ApplicationComponentTemplateDto.CLASS_NAME)
     @GET
     public ApplicationComponentTemplateDto get(
