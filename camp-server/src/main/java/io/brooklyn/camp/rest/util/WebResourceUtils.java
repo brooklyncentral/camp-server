@@ -2,9 +2,12 @@ package io.brooklyn.camp.rest.util;
 
 import io.brooklyn.camp.dto.ApiErrorDto;
 
+import java.net.URI;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,4 +32,11 @@ public class WebResourceUtils {
                 .entity(ApiErrorDto.builder().message(msg).build()).build());
     }
 
+    public static Response created(UriInfo info, String resourceUriPath) {
+        // see http://stackoverflow.com/questions/13702481/javax-response-prepends-method-path-when-setting-location-header-path-on-status
+        // for why we have to return absolute path
+        URI resourceUri = info.getBaseUriBuilder().path( resourceUriPath ).build();
+        return Response.created(resourceUri).build();
+    }
+    
 }

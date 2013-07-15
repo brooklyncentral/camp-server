@@ -11,6 +11,7 @@ import brooklyn.util.collections.MutableMap;
 import brooklyn.util.text.Identifiers;
 import brooklyn.util.time.Time;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -159,7 +160,7 @@ public class AbstractResource {
         public U customAttribute(String key, Object value) { instance().setCustomAttribute(key, value); return thisBuilder(); }
     }
 
-    // only for testing
+    @VisibleForTesting
     protected static class AbstractResourceBuilder extends Builder<AbstractResource,AbstractResourceBuilder> {
         protected AbstractResourceBuilder(String type) {
             super(type);

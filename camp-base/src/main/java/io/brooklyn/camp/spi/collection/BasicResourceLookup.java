@@ -30,6 +30,10 @@ public class BasicResourceLookup<T extends AbstractResource> extends AbstractRes
         links.put(item.getId(), newLink(item.getId(), item.getName()));
     }
     
+    public synchronized void addAll(T... items) {
+        for (T item: items) add(item);
+    }
+    
     public synchronized T update(T item) {
         T old = items.put(item.getId(), item);
         links.put(item.getId(), newLink(item.getId(), item.getName()));

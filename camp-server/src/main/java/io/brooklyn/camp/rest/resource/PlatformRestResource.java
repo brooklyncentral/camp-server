@@ -1,10 +1,10 @@
 package io.brooklyn.camp.rest.resource;
 
 import io.brooklyn.camp.dto.PlatformDto;
+import io.brooklyn.camp.rest.util.WebResourceUtils;
 import io.brooklyn.camp.spi.AssemblyTemplate;
 
 import java.io.InputStream;
-import java.net.URI;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -64,10 +64,7 @@ public class PlatformRestResource extends AbstractCampRestResource {
     }
 
     protected Response created(UriInfo info, AssemblyTemplate template) {
-        // see http://stackoverflow.com/questions/13702481/javax-response-prepends-method-path-when-setting-location-header-path-on-status
-        // for why we have to return absolute path
-        URI assemblyTemplateUri = info.getBaseUriBuilder().path( dto().adapt(template).getUri() ).build();
-        return Response.created(assemblyTemplateUri).build();
+        return WebResourceUtils.created(info, dto().adapt(template).getUri());
     }
 
 }
