@@ -10,3 +10,5 @@ artifacts:
     requirements:
       -
         requirementType: com.java:HostOn
+        target:
+          $domain:attributeWhenReady: [ otherMachine, HOSTNAME ]

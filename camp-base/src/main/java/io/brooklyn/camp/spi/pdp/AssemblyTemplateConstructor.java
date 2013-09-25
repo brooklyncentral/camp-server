@@ -4,6 +4,7 @@ import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
 import io.brooklyn.camp.spi.AssemblyTemplate;
 import io.brooklyn.camp.spi.AssemblyTemplate.Builder;
+import io.brooklyn.camp.spi.PlatformComponentTemplate;
 import io.brooklyn.camp.spi.PlatformTransaction;
 import io.brooklyn.camp.spi.instantiate.AssemblyTemplateInstantiator;
 
@@ -45,7 +46,14 @@ public class AssemblyTemplateConstructor {
 
     public void add(ApplicationComponentTemplate act) {
         checkState();
+        builder.add(act);
         transaction.add(act);
+    }
+
+    public void add(PlatformComponentTemplate pct) {
+        checkState();
+        builder.add(pct);
+        transaction.add(pct);
     }
 
     protected void checkState() {

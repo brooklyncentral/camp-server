@@ -10,21 +10,21 @@ import brooklyn.util.collections.MutableMap;
 
 import com.google.common.collect.ImmutableMap;
 
-public class ArtifactRequirement {
+public class ServiceCharacteristic {
 
     String name;
     String description;
-    String requirementType;
+    String characteristicType;
     
     Map<String,Object> customAttributes;
     
-    public static ArtifactRequirement of(Map<String, Object> req) {
+    public static ServiceCharacteristic of(Map<String, Object> req) {
         Map<String,Object> attrs = MutableMap.copyOf(req);
         
-        ArtifactRequirement result = new ArtifactRequirement();
+        ServiceCharacteristic result = new ServiceCharacteristic();
         result.name = (String) attrs.remove("name");
         result.description = (String) attrs.remove("description");
-        result.requirementType = (String) (String) Yamls.removeMultinameAttribute(attrs, "requirementType", "type");
+        result.characteristicType = (String) Yamls.removeMultinameAttribute(attrs, "characteristicType", "type");
         
         // TODO fulfillment
         
@@ -39,8 +39,8 @@ public class ArtifactRequirement {
     public String getDescription() {
         return description;
     }
-    public String getRequirementType() {
-        return requirementType;
+    public String getCharacteristicType() {
+        return characteristicType;
     }
     
     public Map<String, Object> getCustomAttributes() {

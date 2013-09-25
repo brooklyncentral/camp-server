@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/** A {@link CampPlatform} implementation which is empty but allows adding new items */
 public class BasicCampPlatform extends CampPlatform {
 
     private static final Logger log = LoggerFactory.getLogger(BasicCampPlatform.class);

@@ -6,9 +6,11 @@ import io.brooklyn.camp.spi.instantiate.BasicAssemblyTemplateInstantiator;
 import io.brooklyn.camp.spi.pdp.Artifact;
 import io.brooklyn.camp.spi.pdp.AssemblyTemplateConstructor;
 import io.brooklyn.camp.spi.pdp.DeploymentPlan;
+import io.brooklyn.camp.spi.pdp.Service;
 import io.brooklyn.util.yaml.Yamls;
 
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,15 +31,20 @@ public class PdpProcessor {
         this.campPlatform = campPlatform;
     }
 
-    /** create and return an AssemblyTemplate based on the given PDP */
-    public AssemblyTemplate registerPdpFromYaml(String yaml) {
-        Iterable<Object> template;
-        template = Yamls.parseAll(yaml);
-//        Yamls.dump(0, template);
+    @SuppressWarnings("unchecked")
+    public DeploymentPlan parseDeploymentPlan(Reader yaml) {
+        Iterable<Object> template = Yamls.parseAll(yaml);
         
-        @SuppressWarnings("unchecked")
-        DeploymentPlan plan = DeploymentPlan.of( Yamls.getAs(template, Map.class) );
-        
+        return DeploymentPlan.of( Yamls.getAs(template, Map.class) );
+    }
+    
+    /** create and return an AssemblyTemplate based on the given DP (yaml) */
+    public AssemblyTemplate registerDeploymentPlan(Reader yaml) {
+        DeploymentPlan plan = parseDeploymentPlan(yaml);
+        return registerDeploymentPlan(plan);
+    }
+
+    public AssemblyTemplate registerDeploymentPlan(DeploymentPlan plan) {
         AssemblyTemplateConstructor atc = new AssemblyTemplateConstructor(campPlatform);
         
         // default instantiator is one which just invokes the component's instantiator
@@ -47,12 +54,18 @@ public class PdpProcessor {
         if (plan.getDescription()!=null) atc.description(plan.getDescription());
         // nothing done with origin just now...
         
-        if (plan.getArtifacts()!=null) {
-            for (Artifact art: plan.getArtifacts()) {
-                apply(art, atc);
+        if (plan.getServices()!=null) {
+            for (Service svc: plan.getServices()) {
+                resolve(svc, atc);
             }
         }
-        
+
+        if (plan.getArtifacts()!=null) {
+            for (Artifact art: plan.getArtifacts()) {
+                resolve(art, atc);
+            }
+        }
+
         return atc.commit();
     }
     
@@ -84,15 +97,15 @@ public class PdpProcessor {
         return matchers;
     }
     
-    public void apply(Artifact art, AssemblyTemplateConstructor atc) {
+    public void resolve(Object deploymentPlanItem, AssemblyTemplateConstructor atc) {
         for (PdpMatcher matcher: getMatchers()) {
-            if (matcher.accepts(art)) {
+            if (matcher.accepts(deploymentPlanItem)) {
                 // TODO first accepting is a crude way to do matching ... but good enough to start
-                if (matcher.apply(art, atc))
+                if (matcher.apply(deploymentPlanItem, atc))
                     return;
             }
         }
-        throw new UnsupportedOperationException("Artifact "+art+" cannot be matched");
+        throw new UnsupportedOperationException("Deployment plan item "+deploymentPlanItem+" cannot be matched");
     }
 
 }
