@@ -65,6 +65,10 @@ public class AssemblyTemplate extends AbstractResource {
         public Builder<T> instantiator(Class<? extends AssemblyTemplateInstantiator> x) { instance().setInstantiator(x); return thisBuilder(); }
         public Builder<T> applicationComponentTemplates(ResourceLookup<ApplicationComponentTemplate> x) { instance().setApplicationComponentTemplates(x); return thisBuilder(); }
         public Builder<T> platformComponentTemplates(ResourceLookup<PlatformComponentTemplate> x) { instance().setPlatformComponentTemplates(x); return thisBuilder(); }
+
+        /** allows callers to see the partially formed instance when needed, for example to query instantiators;
+         *  could be replaced by specific methods as and when that is preferred */
+        public T peek() { return instance(); }
         
         public synchronized Builder<T> add(ApplicationComponentTemplate x) {
             if (instance().applicationComponentTemplates==null) {

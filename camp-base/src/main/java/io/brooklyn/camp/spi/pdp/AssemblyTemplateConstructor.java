@@ -43,7 +43,12 @@ public class AssemblyTemplateConstructor {
         checkState();
         builder.instantiator(instantiator);
     }
-
+    
+    public Class<? extends AssemblyTemplateInstantiator> getInstantiator() {
+        checkState();
+        return builder.peek().getInstantiator();
+    }
+    
     public void add(ApplicationComponentTemplate act) {
         checkState();
         builder.add(act);

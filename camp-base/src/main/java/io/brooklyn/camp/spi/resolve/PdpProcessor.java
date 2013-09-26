@@ -47,9 +47,6 @@ public class PdpProcessor {
     public AssemblyTemplate registerDeploymentPlan(DeploymentPlan plan) {
         AssemblyTemplateConstructor atc = new AssemblyTemplateConstructor(campPlatform);
         
-        // default instantiator is one which just invokes the component's instantiator
-        atc.instantiator(BasicAssemblyTemplateInstantiator.class);
-        
         if (plan.getName()!=null) atc.name(plan.getName());
         if (plan.getDescription()!=null) atc.description(plan.getDescription());
         // nothing done with origin just now...
@@ -65,6 +62,11 @@ public class PdpProcessor {
                 resolve(art, atc);
             }
         }
+
+        if (atc.getInstantiator()==null)
+            // set a default instantiator which just invokes the component's instantiators
+            // (or throws unsupported exceptions, currently!)
+            atc.instantiator(BasicAssemblyTemplateInstantiator.class);
 
         return atc.commit();
     }
