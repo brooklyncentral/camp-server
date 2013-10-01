@@ -4,7 +4,7 @@ import io.brooklyn.camp.spi.pdp.Artifact;
 import io.brooklyn.camp.spi.pdp.AssemblyTemplateConstructor;
 import io.brooklyn.camp.spi.pdp.Service;
 
-
+/** Matchers build up the AssemblyTemplate by matching against items in the deployment plan */
 public interface PdpMatcher {
 
     boolean accepts(Object deploymentPlanItem);

@@ -1,0 +1,10 @@
+$sample:ignore: 1
+keep: 1
+mess:
+  2: z
+  $sample:reset: 
+  $sample:ignore: z
+  a: $sample:foo
+  b: $sample:caps:y
+  3: $sample:caps:x
+  $sample:remove: {3: X}
