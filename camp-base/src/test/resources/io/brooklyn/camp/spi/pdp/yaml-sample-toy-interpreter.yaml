@@ -5,6 +5,6 @@ mess:
   $sample:reset: 
   $sample:ignore: z
   a: $sample:foo
-  b: $sample:caps:y
+  b: [ c, "$sample:caps:d" ]
   3: $sample:caps:x
   $sample:remove: {3: X}

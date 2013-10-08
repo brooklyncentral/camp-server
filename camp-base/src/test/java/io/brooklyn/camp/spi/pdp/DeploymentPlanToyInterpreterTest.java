@@ -30,19 +30,24 @@ public class DeploymentPlanToyInterpreterTest {
      * $sample:remove as key causes argument as map to be dropped
      */
     public static class ToyInterpreter extends PlanInterpreterAdapter {
+        
+        @Override
+        public boolean isInterestedIn(PlanInterpretationNode node) {
+            return node.matchesPrefix("$sample:");
+        }
+        
         @Override
         public void applyYamlPrimitive(PlanInterpretationNode node) {
-            if (node.startsWith("$sample:")) {
-                if (node.get().equals("$sample:foo")) node.setNewItem("bar");
-                if (node.startsWith("$sample:caps:")) {
-                    node.setNewItem(Strings.removeFromStart(node.get().toString(), "$sample:caps:").toUpperCase());
-                }
+            if (node.matchesLiteral("$sample:foo")) node.setNewValue("bar").exclude();
+            if (node.matchesPrefix("$sample:caps:")) {
+                node.setNewValue(Strings.removeFromStart(node.getNewValue().toString(), "$sample:caps:").toUpperCase()).exclude();
             }
         }
 
         @Override
         public boolean applyMapBefore(PlanInterpretationNode node, Map<Object, Object> mapIn) {
-            if (mapIn.containsKey("$sample:ignore"))
+            if (node.matchesLiteral("$sample:ignore"))
+                // replace
                 mapIn.put("$sample:ignore", 0);
             return super.applyMapBefore(node, mapIn);
         }
@@ -50,14 +55,11 @@ public class DeploymentPlanToyInterpreterTest {
         @Override
         public boolean applyMapEntry(PlanInterpretationNode node, Map<Object, Object> mapIn, Map<Object, Object> mapOut,
                                 PlanInterpretationNode key, PlanInterpretationNode value) {
-            if (key.get()==null)
-                return true;
-            
-            if (key.get().equals("$sample:ignore")) {
-                Assert.assertEquals(value.get(), 0);
+            if (key.matchesLiteral("$sample:ignore")) {
+                Assert.assertEquals(value.getNewValue(), 0);
                 return false;
             }
-            if (key.get().equals("$sample:reset")) {
+            if (key.matchesLiteral("$sample:reset")) {
                 mapOut.clear();
                 return false;
             }
@@ -91,7 +93,4 @@ public class DeploymentPlanToyInterpreterTest {
         Assert.assertEquals(y2, y3);
     }
 
-    public static void main(String[] args) {
-        new DeploymentPlanToyInterpreterTest().testToyInterpreter();
-    }
 }

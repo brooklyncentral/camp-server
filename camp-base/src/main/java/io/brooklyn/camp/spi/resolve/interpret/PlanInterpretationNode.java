@@ -4,26 +4,38 @@ import io.brooklyn.camp.spi.resolve.PlanInterpreter;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import brooklyn.util.collections.MutableList;
 import brooklyn.util.collections.MutableMap;
+import brooklyn.util.text.StringPredicates;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 
 /** Helper class for {@link PlanInterpreter} instances, doing the recursive work */
 public class PlanInterpretationNode {
 
+    private static final Logger log = LoggerFactory.getLogger(PlanInterpretationNode.class);
+    
     public enum Role { MAP_KEY, MAP_VALUE, LIST_ENTRY, YAML_PRIMITIVE }
 
     protected final PlanInterpretationNode parent;
     protected final Role roleInParent;
-    protected final Object originalItem;
+    protected final Object originalValue;
     protected final PlanInterpretationContext context;
-    protected Object newItem = null;
+    protected Object newValue = null;
     protected Boolean changed = null;
+    protected boolean excluded = false;
+    protected boolean immutable = false;
 
     /** creates a root node with {@link #apply()} called */
     public PlanInterpretationNode(PlanInterpretationContext context) {
         this.parent = null;
         this.roleInParent = null;
-        this.originalItem = context.getOriginalDeploymentPlan();
+        this.originalValue = context.getOriginalDeploymentPlan();
         this.context = context;
         apply();
     }
@@ -32,7 +44,7 @@ public class PlanInterpretationNode {
     protected PlanInterpretationNode(PlanInterpretationNode parent, Role roleInParent, Object originalItem) {
         this.parent = parent;
         this.roleInParent = roleInParent;
-        this.originalItem = originalItem;
+        this.originalValue = originalItem;
         this.context = parent.getContext();
     }
 
@@ -40,28 +52,72 @@ public class PlanInterpretationNode {
         return context;
     }
 
+    public PlanInterpretationNode getParent() {
+        return parent;
+    }
+    
+    public Role getRoleInParent() {
+        return roleInParent;
+    }
+    
     protected void apply() {
         if (changed!=null) throw new IllegalStateException("can only be applied once");
 
-        if (originalItem instanceof Map) {
-            applyToMap();
-        } else if (originalItem instanceof Iterable) {
-            applyToIterable();
-        } else {
-            applyToYamlPrimitive();
+        if (!excluded) {
+            if (originalValue instanceof Map) {
+                applyToMap();
+                immutable();
+            } else if (originalValue instanceof Iterable) {
+                applyToIterable();
+                immutable();
+            } else {
+                applyToYamlPrimitive();
+            }
         }
         
         if (changed==null) changed = false;
     }
 
-    /** convenience for interpreters, returns true if node is a string and starts with the given prefix */
-    public boolean startsWith(String prefix) {
-        return (get() instanceof CharSequence) && (get().toString().startsWith(prefix));
+    /** convenience for interpreters, tests if nodes are not excluded, and if not:
+     * for string nodes, true iff the current value equals the given target;
+     * for nodes which are currently maps or lists,
+     * true iff not excluded and the value contains such an entry (key, in the case of map)
+     **/
+    public boolean matchesLiteral(String target) {
+        if (isExcluded()) return false; 
+        if (getNewValue() instanceof CharSequence)
+            return getNewValue().toString().equals(target);
+        if (getNewValue() instanceof Map)
+            return ((Map<?,?>)getOriginalValue()).containsKey(target);
+        if (getNewValue() instanceof Iterable)
+            return Iterables.contains((Iterable<?>)getOriginalValue(), target);
+        return false;
+    }
+
+    /** convenience for interpreters, tests if nodes are not excluded, and if not:
+     * for string nodes, true iff the current value starts with the given prefix;
+     * for nodes which are currently maps or lists,
+     * true iff not excluded and the value contains such an entry (key, in the case of map) */
+    public boolean matchesPrefix(String prefix) {
+        if (isExcluded()) return false; 
+        if (getNewValue() instanceof CharSequence)
+            return getNewValue().toString().startsWith(prefix);
+        if (getNewValue() instanceof Map)
+            return Iterables.tryFind(((Map<?,?>)getNewValue()).keySet(), StringPredicates.isStringStartingWith(prefix)).isPresent();
+        if (getNewValue() instanceof Iterable)
+            return Iterables.tryFind((Iterable<?>)getNewValue(), StringPredicates.isStringStartingWith(prefix)).isPresent();
+        return false;
     }
     
-    public Object get() {
-        if (changed==null || !isChanged()) return originalItem;
-        return newItem;
+    // TODO matchesRegex ?
+
+    public Object getOriginalValue() {
+        return originalValue;
+    }
+
+    public Object getNewValue() {
+        if (changed==null || !isChanged()) return originalValue;
+        return newValue;
     }
 
     public boolean isChanged() {
@@ -69,9 +125,22 @@ public class PlanInterpretationNode {
         return changed;
     }
 
-    public void setNewItem(Object newItem) {
-        this.newItem = newItem;
+    public boolean isExcluded() {
+        return excluded;
+    }
+    
+    /** indicates that a node should no longer be translated */
+    public PlanInterpretationNode exclude() {
+        this.excluded = true;
+        return this;
+    }
+    
+    public PlanInterpretationNode setNewValue(Object newItem) {
+        if (immutable)
+            throw new IllegalStateException("Node "+this+" has been set immutable");
+        this.newValue = newItem;
         this.changed = true;
+        return this;
     }
 
     protected PlanInterpretationNode newPlanInterpretation(PlanInterpretationNode parent, Role roleInParent, Object item) {
@@ -79,9 +148,9 @@ public class PlanInterpretationNode {
     }
 
     protected void applyToMap() {
-        Map<Object, Object> input = MutableMap.<Object,Object>copyOf((Map<?,?>)originalItem);
+        Map<Object, Object> input = MutableMap.<Object,Object>copyOf((Map<?,?>)originalValue);
         Map<Object, Object> result = MutableMap.<Object,Object>of();
-        newItem = result;
+        newValue = result;
 
         // first do a "whole-node" application
         if (getContext().getAllInterpreter().applyMapBefore(this, input)) {
@@ -98,7 +167,7 @@ public class PlanInterpretationNode {
                     changed = true;
 
                 if (getContext().getAllInterpreter().applyMapEntry(this, input, result, key, value))
-                    result.put(key.get(), value.get());
+                    result.put(key.getNewValue(), value.getNewValue());
                 else
                     changed = true;
             }
@@ -111,9 +180,9 @@ public class PlanInterpretationNode {
     }
 
     protected void applyToIterable() {
-        MutableList<Object> input = MutableList.copyOf((Iterable<?>)originalItem);
+        MutableList<Object> input = MutableList.copyOf((Iterable<?>)originalValue);
         MutableList<Object> result = new MutableList<Object>();
-        newItem = result;
+        newValue = result;
 
         // first do a "whole-node" application
         if (getContext().getAllInterpreter().applyListBefore(this, input)) {
@@ -127,7 +196,7 @@ public class PlanInterpretationNode {
                     changed = true;
 
                 if (getContext().getAllInterpreter().applyListEntry(this, input, result, value))
-                    result.add(value);
+                    result.add(value.getNewValue());
             }
 
             // finally try applying to this node again
@@ -139,6 +208,38 @@ public class PlanInterpretationNode {
 
     protected void applyToYamlPrimitive() {
         getContext().getAllInterpreter().applyYamlPrimitive(this);
+    }
+
+    public void immutable() {
+        if (!isChanged()) {
+            if (!testCollectionImmutable(getNewValue())) {
+                // results of Yaml parse are not typically immutable,
+                // so force them to be changed so result of interpretation is immutable
+                changed = true;
+                setNewValue(immutable(getNewValue()));
+            }
+        } else {
+            setNewValue(immutable(getNewValue()));
+        }
+        checkImmutable(getNewValue());
+        immutable = true;
+    }
+    
+    private void checkImmutable(Object in) {
+        if (!testCollectionImmutable(in))
+            log.warn("Node original value "+in+" at "+this+" should be immutable");
+    }
+    
+    private static boolean testCollectionImmutable(Object in) {
+        if (in instanceof Map) return (in instanceof ImmutableMap);
+        if (in instanceof Iterable) return (in instanceof ImmutableList);
+        return true;
+    }
+
+    private static Object immutable(Object in) {
+        if (in instanceof Map) return ImmutableMap.copyOf((Map<?,?>)in);
+        if (in instanceof Iterable) return ImmutableList.copyOf((Iterable<?>)in);
+        return in;
     }
 
 }

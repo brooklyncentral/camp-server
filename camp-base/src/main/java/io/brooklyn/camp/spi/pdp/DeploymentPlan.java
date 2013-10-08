@@ -38,7 +38,7 @@ public class DeploymentPlan {
                 if (service instanceof Map) {
                     result.services.add(Service.of((Map<String,Object>) service));
                 } else {
-                    throw new IllegalArgumentException("artifact should be map, not "+service.getClass());
+                    throw new IllegalArgumentException("service should be map, not "+service.getClass());
                 }
             }
         } else if (services!=null) {

@@ -137,7 +137,7 @@ public class PdpProcessor {
 	public Map<String, Object> applyInterpreters(Map<String, Object> originalDeploymentPlan) {
     	PlanInterpretationNode interpretation = new PlanInterpretationNode(
     			new PlanInterpretationContext(originalDeploymentPlan, interpreters));
-		return (Map<String, Object>) interpretation.get();
+		return (Map<String, Object>) interpretation.getNewValue();
     }
     
 }

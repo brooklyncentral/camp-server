@@ -9,7 +9,7 @@ import java.util.Map;
  * typically by looking for items which begin with "$namespace:"
  * <p>
  * Most common usages simple need to supply {@link #applyYamlPrimitive(PlanInterpretationNode)} which can invoke
- * {@link PlanInterpretationNode#setNewItem(Object)} to change.
+ * {@link PlanInterpretationNode#setNewValue(Object)} to change.
  * The {@link PlanInterpreterAdapter} makes this easy by supplying all methods but that.
  * <p>
  * For more sophisticated usages, to act on entire maps or lists,
@@ -17,8 +17,11 @@ import java.util.Map;
  *  */
 public interface PlanInterpreter {
 
+    /** guard to prevent any apply calls when an Interpreter is not interested in a node */
+    boolean isInterestedIn(PlanInterpretationNode node);
+    
     /** provides an opportunity for an interpreter to change the value at a node,
-     * using {@link PlanInterpretationNode#get()} and {@link PlanInterpretationNode#setNewItem(Object)} */
+     * using {@link PlanInterpretationNode#get()} and {@link PlanInterpretationNode#setNewValue(Object)} */
     void applyYamlPrimitive(PlanInterpretationNode node);
 
     /** invoked at a Map node in a YAML tree, before any conversion to mapOut.
@@ -27,7 +30,7 @@ public interface PlanInterpreter {
      * <p>
      * the return value indicates whether to recurse into the item.
      * if any interpreters return false, the node is not recursed. 
-     * (callers may use {@link PlanInterpretationNode#setNewItem(Object)} to set a custom return value.) */
+     * (callers may use {@link PlanInterpretationNode#setNewValue(Object)} to set a custom return value.) */
     boolean applyMapBefore(PlanInterpretationNode node, Map<Object, Object> mapIn);
 
     /** invoked at a Map node in a YAML tree, after {@link #applyMapBefore(PlanInterpretationNode, Map)},

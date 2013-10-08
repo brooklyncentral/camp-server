@@ -1,4 +1,4 @@
 keep: 1
 mess:
   a: bar
-  b: Y
+  b: [ c, D ]
