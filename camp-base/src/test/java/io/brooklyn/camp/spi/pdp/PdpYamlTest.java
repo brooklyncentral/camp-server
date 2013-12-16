@@ -20,13 +20,31 @@ public class PdpYamlTest {
     private static final Logger log = LoggerFactory.getLogger(PdpYamlTest.class);
     
     @Test
-    public void testSimpleYamlParse() throws IOException {
+    public void testSimpleYamlArtifactParse() throws IOException {
         BasicCampPlatform platform = MockWebPlatform.populate(new BasicCampPlatform());
         Reader input = Streams.reader(getClass().getResourceAsStream("pdp-single-artifact.yaml"));
         DeploymentPlan plan = platform.pdp().parseDeploymentPlan(input);
         log.info("DP is:\n"+plan.toString());
-        Assert.assertEquals(plan.getArtifacts().size(), 1);
         Assert.assertEquals(plan.getName(), "sample");
+        Assert.assertEquals(plan.getArtifacts().size(), 1);
+        Assert.assertEquals(plan.getServices().size(), 0);
+        
+        Artifact artifact1 = plan.getArtifacts().iterator().next();
+        Assert.assertEquals(artifact1.getName(), "sample WAR");
+    }
+    
+    @Test
+    public void testSimpleYamlServiceParse() throws IOException {
+        BasicCampPlatform platform = MockWebPlatform.populate(new BasicCampPlatform());
+        Reader input = Streams.reader(getClass().getResourceAsStream("pdp-single-service.yaml"));
+        DeploymentPlan plan = platform.pdp().parseDeploymentPlan(input);
+        log.info("DP is:\n"+plan.toString());
+        Assert.assertEquals(plan.getName(), "sample");
+        Assert.assertEquals(plan.getArtifacts().size(), 0);
+        Assert.assertEquals(plan.getServices().size(), 1);
+        
+        Service service1 = plan.getServices().iterator().next();
+        Assert.assertEquals(service1.getName(), "Hello WAR");
     }
     
     @Test

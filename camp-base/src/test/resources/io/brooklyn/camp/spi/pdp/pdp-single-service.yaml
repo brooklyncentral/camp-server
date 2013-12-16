@@ -4,7 +4,8 @@ origin: http://www.oracle.com/nCAMP/Hand
 services:
   -
     type: brooklyn:WebAppCluster
+    name: Hello WAR
     wars:
-    	/: hello.war
+        /: hello.war
     controller.spec:
-		port: 80
+        port: 80
