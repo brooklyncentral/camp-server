@@ -2,7 +2,6 @@ package io.brooklyn.camp;
 
 import io.brooklyn.camp.rest.resource.PlatformRestResource;
 import io.brooklyn.camp.rest.util.DtoFactory;
-import io.brooklyn.util.dups.NetworkUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brooklyn.util.exceptions.Exceptions;
+import brooklyn.util.net.Networking;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -129,7 +129,7 @@ public class CampServer {
 
         public static Server startServer(ContextHandler context, String summary) {
             // FIXME port hardcoded
-            Server server = new Server(NetworkUtils.nextAvailablePort(8080));
+            Server server = new Server(Networking.nextAvailablePort(8080));
             server.setHandler(context);
             try {
                 server.start();

@@ -20,4 +20,9 @@ public abstract class PlatformTransaction {
         return this;
     }
 
+    public PlatformTransaction add(PlatformComponentTemplate pct) {
+        additions.add(pct);
+        return this;
+    }
+
 }

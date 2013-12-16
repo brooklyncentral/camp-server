@@ -8,5 +8,10 @@ public abstract class AbstractResourceLookup<T extends AbstractResource> impleme
     protected ResolvableLink<T> newLink(String id, String name) {
         return new ResolvableLink<T>(id, name, this);
     }
-    
+
+    @Override
+    public boolean isEmpty() {
+        return links().isEmpty();
+    }
+
 }

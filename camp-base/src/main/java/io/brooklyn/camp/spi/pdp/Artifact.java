@@ -1,5 +1,7 @@
 package io.brooklyn.camp.spi.pdp;
 
+import io.brooklyn.util.yaml.Yamls;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +31,7 @@ public class Artifact {
         Artifact result = new Artifact();
         result.name = (String) fields.remove("name");
         result.description = (String) fields.remove("description");
-        result.artifactType = (String) fields.remove("artifactType");
+        result.artifactType = (String) (String) Yamls.removeMultinameAttribute(fields, "artifactType", "type");
         
         result.content = ArtifactContent.of( fields.remove("content") );
         

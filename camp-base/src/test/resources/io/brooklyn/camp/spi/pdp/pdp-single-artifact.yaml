@@ -3,10 +3,7 @@ description: Tomcat sample JSP and servlet application.
 origin: http://www.oracle.com/nCAMP/Hand
 artifacts:
   -
+    type: com.java:WAR
+    content: { href: sample.war }
     name: sample WAR
     description: Tomcat sample WAR file
-    artifactType: com.java:WAR
-    content: { href: sample.war }
-    requirements:
-      -
-        requirementType: com.java:HostOn

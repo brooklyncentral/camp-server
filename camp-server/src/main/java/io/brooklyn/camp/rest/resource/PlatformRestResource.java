@@ -5,6 +5,7 @@ import io.brooklyn.camp.rest.util.WebResourceUtils;
 import io.brooklyn.camp.spi.AssemblyTemplate;
 
 import java.io.InputStream;
+import java.io.StringReader;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -51,7 +52,7 @@ public class PlatformRestResource extends AbstractCampRestResource {
     @Consumes({"application/x-yaml"})
     public Response postYaml(@Context UriInfo info, String yaml) {
         log.debug("YAML pdp:\n"+yaml);
-        AssemblyTemplate template = camp().pdp().registerPdpFromYaml(yaml);
+        AssemblyTemplate template = camp().pdp().registerDeploymentPlan(new StringReader(yaml));
         return created(info, template);
     }
 

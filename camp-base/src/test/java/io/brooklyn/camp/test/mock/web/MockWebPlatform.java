@@ -23,6 +23,12 @@ public class MockWebPlatform {
                 .description("Mock Application Server")
                 .build();
 
+    public static final PlatformComponentTemplate DATABASE = 
+            PlatformComponentTemplate.builder()
+                .name("io.camp.mock:Database")
+                .description("Mock Database")
+                .build();
+
     public static final AssemblyTemplate ASSEMBLY1 =
             AssemblyTemplate.builder()
                 .name("WebAppAssembly1")
@@ -49,7 +55,7 @@ public class MockWebPlatform {
     };
     
     public static <T extends BasicCampPlatform> T populate(T platform) {
-        platform.platformComponentTemplates().add(APPSERVER);
+        platform.platformComponentTemplates().addAll(APPSERVER, DATABASE);
         platform.applicationComponentTemplates().add(WAR);
         platform.assemblyTemplates().add(ASSEMBLY1);
         

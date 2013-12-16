@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** Tests identity methods and custom attributes for DTO, including Jackson JSON serialization */
-@Test
 public class BasicDtoTest {
 
     private static final Logger log = LoggerFactory.getLogger(BasicDtoTest.class);
@@ -62,7 +61,7 @@ public class BasicDtoTest {
         try {
             ObjectMapper m = new ObjectMapper();
             String s = m.writeValueAsString(l);
-            log.debug(l.toString()+" -> "+s);
+            log.info(l.toString()+" -> "+s);
             JsonNode t = m.readTree(s);
             return t;
         } catch (Exception e) {

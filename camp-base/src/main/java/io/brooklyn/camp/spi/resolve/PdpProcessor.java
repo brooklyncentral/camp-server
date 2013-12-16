@@ -6,9 +6,13 @@ import io.brooklyn.camp.spi.instantiate.BasicAssemblyTemplateInstantiator;
 import io.brooklyn.camp.spi.pdp.Artifact;
 import io.brooklyn.camp.spi.pdp.AssemblyTemplateConstructor;
 import io.brooklyn.camp.spi.pdp.DeploymentPlan;
+import io.brooklyn.camp.spi.pdp.Service;
+import io.brooklyn.camp.spi.resolve.interpret.PlanInterpretationContext;
+import io.brooklyn.camp.spi.resolve.interpret.PlanInterpretationNode;
 import io.brooklyn.util.yaml.Yamls;
 
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +21,8 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import brooklyn.util.exceptions.Exceptions;
 
 public class PdpProcessor {
@@ -24,35 +30,53 @@ public class PdpProcessor {
     final CampPlatform campPlatform;
     
     final List<PdpMatcher> matchers = new ArrayList<PdpMatcher>();
+    final List<PlanInterpreter> interpreters = new ArrayList<PlanInterpreter>();
     
     public PdpProcessor(CampPlatform campPlatform) {
         this.campPlatform = campPlatform;
     }
 
-    /** create and return an AssemblyTemplate based on the given PDP */
-    public AssemblyTemplate registerPdpFromYaml(String yaml) {
-        Iterable<Object> template;
-        template = Yamls.parseAll(yaml);
-//        Yamls.dump(0, template);
+    @SuppressWarnings("unchecked")
+    public DeploymentPlan parseDeploymentPlan(Reader yaml) {
+        Iterable<Object> template = Yamls.parseAll(yaml);
         
-        @SuppressWarnings("unchecked")
-        DeploymentPlan plan = DeploymentPlan.of( Yamls.getAs(template, Map.class) );
+        Map<String, Object> dpRootUninterpreted = Yamls.getAs(template, Map.class);
+        Map<String, Object> dpRootInterpreted = applyInterpreters(dpRootUninterpreted);
         
+		return DeploymentPlan.of( dpRootInterpreted );
+    }
+    
+    /** create and return an AssemblyTemplate based on the given DP (yaml) */
+    public AssemblyTemplate registerDeploymentPlan(Reader yaml) {
+        DeploymentPlan plan = parseDeploymentPlan(yaml);
+        return registerDeploymentPlan(plan);
+    }
+
+    /** applies matchers to the given deployment plan to create an assembly template */
+    public AssemblyTemplate registerDeploymentPlan(DeploymentPlan plan) {
         AssemblyTemplateConstructor atc = new AssemblyTemplateConstructor(campPlatform);
-        
-        // default instantiator is one which just invokes the component's instantiator
-        atc.instantiator(BasicAssemblyTemplateInstantiator.class);
         
         if (plan.getName()!=null) atc.name(plan.getName());
         if (plan.getDescription()!=null) atc.description(plan.getDescription());
         // nothing done with origin just now...
         
-        if (plan.getArtifacts()!=null) {
-            for (Artifact art: plan.getArtifacts()) {
-                apply(art, atc);
+        if (plan.getServices()!=null) {
+            for (Service svc: plan.getServices()) {
+                applyMatchers(svc, atc);
             }
         }
-        
+
+        if (plan.getArtifacts()!=null) {
+            for (Artifact art: plan.getArtifacts()) {
+                applyMatchers(art, atc);
+            }
+        }
+
+        if (atc.getInstantiator()==null)
+            // set a default instantiator which just invokes the component's instantiators
+            // (or throws unsupported exceptions, currently!)
+            atc.instantiator(BasicAssemblyTemplateInstantiator.class);
+
         return atc.commit();
     }
     
@@ -75,6 +99,9 @@ public class PdpProcessor {
         }
     }
 
+
+    // ----------------------------
+    
     public void addMatcher(PdpMatcher m) {
         // TODO a list is a crude way to do matching ... but good enough to start
         matchers.add(m);
@@ -83,16 +110,34 @@ public class PdpProcessor {
     public List<PdpMatcher> getMatchers() {
         return matchers;
     }
-    
-    public void apply(Artifact art, AssemblyTemplateConstructor atc) {
+
+
+    protected void applyMatchers(Object deploymentPlanItem, AssemblyTemplateConstructor atc) {
         for (PdpMatcher matcher: getMatchers()) {
-            if (matcher.accepts(art)) {
+            if (matcher.accepts(deploymentPlanItem)) {
                 // TODO first accepting is a crude way to do matching ... but good enough to start
-                if (matcher.apply(art, atc))
+                if (matcher.apply(deploymentPlanItem, atc))
                     return;
             }
         }
-        throw new UnsupportedOperationException("Artifact "+art+" cannot be matched");
+        throw new UnsupportedOperationException("Deployment plan item "+deploymentPlanItem+" cannot be matched");
     }
 
+    // ----------------------------
+
+    public void addInterpreter(PlanInterpreter interpreter) {
+    	interpreters.add(interpreter);
+    }
+    
+    /** returns a DeploymentPlan object which is the result of running the interpretation
+     * (with all interpreters) against the supplied deployment plan YAML object,
+     * essentially a post-parse processing step before matching */
+    @SuppressWarnings("unchecked")
+    @VisibleForTesting
+	public Map<String, Object> applyInterpreters(Map<String, Object> originalDeploymentPlan) {
+    	PlanInterpretationNode interpretation = new PlanInterpretationNode(
+    			new PlanInterpretationContext(originalDeploymentPlan, interpreters));
+		return (Map<String, Object>) interpretation.getNewValue();
+    }
+    
 }

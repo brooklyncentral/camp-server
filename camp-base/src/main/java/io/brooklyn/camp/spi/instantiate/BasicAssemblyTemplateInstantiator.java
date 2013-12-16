@@ -9,7 +9,10 @@ public class BasicAssemblyTemplateInstantiator implements AssemblyTemplateInstan
 
     public Assembly instantiate(AssemblyTemplate template, CampPlatform platform) {
         // TODO this should build it based on the components
-        throw new UnsupportedOperationException("TODO");
+//        template.getPlatformComponentTemplates().links().iterator().next().resolve();
+        
+        // platforms should set a bunch of instantiators, or else let the ComponentTemplates do this!
+        throw new UnsupportedOperationException("Basic instantiator not yet supported");
     }
 
 }

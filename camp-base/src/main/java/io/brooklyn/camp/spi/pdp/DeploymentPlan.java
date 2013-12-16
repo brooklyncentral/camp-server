@@ -18,6 +18,7 @@ public class DeploymentPlan {
     String description;
     
     List<Artifact> artifacts;
+    List<Service> services;
     Map<String,Object> customAttributes;
 
     @SuppressWarnings("unchecked")
@@ -29,6 +30,21 @@ public class DeploymentPlan {
         result.description = (String) attrs.remove("description");
         result.origin = (String) attrs.remove("origin");
         // TODO version
+        
+        result.services = new ArrayList<Service>();
+        Object services = attrs.remove("services");
+        if (services instanceof Iterable) {
+            for (Object service: (Iterable<Object>)services) {
+                if (service instanceof Map) {
+                    result.services.add(Service.of((Map<String,Object>) service));
+                } else {
+                    throw new IllegalArgumentException("service should be map, not "+service.getClass());
+                }
+            }
+        } else if (services!=null) {
+            // TODO "map" short form
+            throw new IllegalArgumentException("artifacts body should be iterable, not "+services.getClass());
+        }
         
         result.artifacts = new ArrayList<Artifact>();
         Object artifacts = attrs.remove("artifacts");
@@ -61,6 +77,9 @@ public class DeploymentPlan {
     }
     public List<Artifact> getArtifacts() {
         return ImmutableList.copyOf(artifacts);
+    }
+    public List<Service> getServices() {
+        return ImmutableList.copyOf(services);
     }
     public Map<String, Object> getCustomAttributes() {
         return ImmutableMap.copyOf(customAttributes);

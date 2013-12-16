@@ -166,5 +166,9 @@ public class AbstractResource {
             super(type);
         }
     }
-    
+
+    @Override
+    public String toString() {
+        return super.toString()+"[id="+getId()+"; type="+getType()+"]";
+    }
 }

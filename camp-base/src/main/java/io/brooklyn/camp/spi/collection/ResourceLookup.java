@@ -11,6 +11,8 @@ public interface ResourceLookup<T extends AbstractResource> {
     public abstract T get(String id);
     
     public abstract List<ResolvableLink<T>> links();
+    
+    public abstract boolean isEmpty();
 
     public static class EmptyResourceLookup<T extends AbstractResource> implements ResourceLookup<T> {
         public T get(String id) {
@@ -18,6 +20,9 @@ public interface ResourceLookup<T extends AbstractResource> {
         }
         public List<ResolvableLink<T>> links() {
             return Collections.emptyList();
+        }
+        public boolean isEmpty() {
+            return links().isEmpty();
         }
     }
     

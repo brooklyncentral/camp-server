@@ -71,7 +71,7 @@
 
         <camp-impl.version>0.1.0-SNAPSHOT</camp-impl.version>  <!-- CAMP_IMPL_VERSION -->
 
-        <brooklyn.version>0.6.0-SNAPSHOT</brooklyn.version>  <!-- BROOKLYN_VERSION -->
+        <brooklyn.version>0.7.0-SNAPSHOT</brooklyn.version>  <!-- BROOKLYN_VERSION -->
         <jackson.version>2.2.0</jackson.version>
         <commons-lang3.version>3.1</commons-lang3.version>
         <commons-compress.version>1.4</commons-compress.version>
@@ -155,9 +155,40 @@
                         </filesets>
                     </configuration>
                 </plugin>
+<!--
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>2.3.2</version>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+-->
+<!-- use the groovy-eclipse-compiler (below) instead of the stack maven/java one (above)
+     because we use an inner-class builder pattern which references private outer class
+     members which gives "has private access" errors with some javac's (fixed in java7?) -->
+                <plugin>
+                  <artifactId>maven-compiler-plugin</artifactId>
+                  <configuration>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
+                    <fork>true</fork>
+                    <verbose>false</verbose>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                  </configuration>
+                  <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>2.7.0-01</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>1.8.6-01</version>
+                    </dependency>
+                  </dependencies>
                 </plugin>
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
