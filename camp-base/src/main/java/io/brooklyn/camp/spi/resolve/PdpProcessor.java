@@ -72,6 +72,10 @@ public class PdpProcessor {
             }
         }
 
+        Map<String, Object> attrs = plan.getCustomAttributes();
+        if (attrs!=null && !attrs.isEmpty())
+            atc.addCustomAttributes(attrs);
+        
         if (atc.getInstantiator()==null)
             // set a default instantiator which just invokes the component's instantiators
             // (or throws unsupported exceptions, currently!)

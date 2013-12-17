@@ -1,5 +1,7 @@
 package io.brooklyn.camp.spi.pdp;
 
+import java.util.Map;
+
 import io.brooklyn.camp.CampPlatform;
 import io.brooklyn.camp.spi.ApplicationComponentTemplate;
 import io.brooklyn.camp.spi.AssemblyTemplate;
@@ -38,7 +40,12 @@ public class AssemblyTemplateConstructor {
         checkState();
         builder.description(description);
     }
-    
+
+    public void addCustomAttributes(Map<String, Object> attrs) {
+        for (Map.Entry<String, Object> attr : attrs.entrySet())
+            builder.customAttribute(attr.getKey(), attr.getValue());
+    }
+
     public void instantiator(Class<? extends AssemblyTemplateInstantiator> instantiator) {
         checkState();
         builder.instantiator(instantiator);
