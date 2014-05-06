@@ -20,10 +20,11 @@ import java.util.Map;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
-
-import com.google.common.annotations.VisibleForTesting;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import brooklyn.util.exceptions.Exceptions;
+
+import com.google.common.annotations.VisibleForTesting;
 
 public class PdpProcessor {
 
@@ -40,7 +41,13 @@ public class PdpProcessor {
     public DeploymentPlan parseDeploymentPlan(Reader yaml) {
         Iterable<Object> template = Yamls.parseAll(yaml);
         
-        Map<String, Object> dpRootUninterpreted = Yamls.getAs(template, Map.class);
+        Map<String, Object> dpRootUninterpreted = null;
+        try {
+            dpRootUninterpreted = Yamls.getAs(template, Map.class);
+        } catch (Exception e) {
+            Exceptions.propagateIfFatal(e);
+            throw new YAMLException("Plan not in acceptable format: "+(e.getMessage()!=null ? e.getMessage() : ""+e), e);
+        }
         Map<String, Object> dpRootInterpreted = applyInterpreters(dpRootUninterpreted);
         
 		return DeploymentPlan.of( dpRootInterpreted );

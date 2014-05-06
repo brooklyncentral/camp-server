@@ -13,6 +13,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,8 +130,15 @@ public class CampServer {
 
         public static Server startServer(ContextHandler context, String summary) {
             // FIXME port hardcoded
-            Server server = new Server(Networking.nextAvailablePort(8080));
+            int port = Networking.nextAvailablePort(8080);
+            Server server = new Server(port);
             server.setHandler(context);
+            
+            // use a nice name in the thread pool (otherwise this is exactly the same as Server defaults)
+            QueuedThreadPool threadPool = new QueuedThreadPool();
+            threadPool.setName("camp-jetty-server-"+port+"-"+threadPool.getName());
+            server.setThreadPool(threadPool);
+
             try {
                 server.start();
             } catch (Exception e) {

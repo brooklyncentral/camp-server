@@ -158,6 +158,8 @@ public class AbstractResource {
         public U tags(List<String> x) { instance().setTags(x); return thisBuilder(); }
         public U representationSkew(RepresentationSkew x) { instance().setRepresentationSkew(x); return thisBuilder(); }
         public U customAttribute(String key, Object value) { instance().setCustomAttribute(key, value); return thisBuilder(); }
+        
+//        public String type() { return instance().type; }
     }
 
     @VisibleForTesting
